@@ -7,9 +7,9 @@ body {
 }
 
 header {
-    background: #35424a;
+    background: black;
     color: #ffffff;
-    padding: 15px 0;
+    padding: 10px 0;
     text-align: center;
 }
 
@@ -47,9 +47,10 @@ section {
 
 footer {
     text-align: center;
-    padding: 5px 0;
-    background: #35424a;
+    padding: 5px 0px;
+    background: black;
     color: #ffffff;
+
 }
 
 #red{
@@ -57,7 +58,7 @@ footer {
 }
 
 h1{
-    color: yellow;
+    color: skyblue;
 }
 
 #myN{
