@@ -64,3 +64,20 @@ h1{
 #myN{
     color: Red;
 }
+
+
+/*FOR LOGIN PAGE*/
+
+#body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: seagreen;
+}
+
+.wrapper{
+    width: 420px;
+    
+
+}
