@@ -96,8 +96,12 @@ h1{
 }
 
 .wrapper h1 {
-    font-size: 36px;
+    font-size: 37px;
     margin-bottom: 20px;
+}
+
+.login{
+    font-style: Times new roman;
 }
 
 .wrapper .input-box {
@@ -129,7 +133,7 @@ h1{
 
 .input-box i {
     position: absolute;
-    right: 15px;
+    right: 23px;
     top: 50%;
     transform: translateY(-50%);
     font-size: 20px;
@@ -188,7 +192,7 @@ h1{
 /* RESPONSIVE DESIGN */
 @media (max-width: 450px) {
     .wrapper {
-        width: 90%;
+        width: 1%;
         padding: 20px;
     }
 }
