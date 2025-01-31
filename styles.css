@@ -82,11 +82,17 @@ h1{
     align-items: center;
     min-height: 100vh;
     background: linear-gradient(135deg, #2ecc71, #16a085);
+    background-image: url("bg.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover; /* Ensures full screen coverage */
+    background-attachment: fixed; /* Keeps the image in place while scrolling */
 }
+
 
 .wrapper {
     width: 400px;
-    bbackground: rgba(128, 0, 128, 0.9); /* Semi-transparent purple */
+    bbackground: rgba(177, 17, 177, 0.9); /* Semi-transparent purple */
     color: white;
     padding: 30px;
     border-radius: 12px;
@@ -96,14 +102,15 @@ h1{
 }
 
 .wrapper h1 {
-    font-size: 37px;
+    font-size: 30px;
     margin-bottom: 20px;
 }
 
 .login{
-    font-style: Times new roman;
+    color: black;
+    font-family: Georgia, 'Times New Roman', Times, serif;
+  
 }
-
 .wrapper .input-box {
     position: relative;
     width: 100%;
