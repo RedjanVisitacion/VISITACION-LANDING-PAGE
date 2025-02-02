@@ -9,7 +9,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
-    background-image: url("bg.jpg");
+    background-image: url("");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover; 
@@ -18,7 +18,7 @@ body {
 
 /* HEADER */
 header {
-    background: rgba(0, 0, 0, 0.8); /* Added opacity for better contrast */
+    background: rgba(0, 0, 0, 10); /* Added opacity for better contrast */
     color: #ffffff;
     text-align: center;
     padding: 15px 0;
