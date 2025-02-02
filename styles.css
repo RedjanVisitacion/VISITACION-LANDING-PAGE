@@ -1,3 +1,4 @@
+/* General Styling */
 html {
     scroll-behavior: smooth;
 }
@@ -8,11 +9,16 @@ body {
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
+    background-image: url("bg.jpg");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover; 
+    background-attachment: fixed; 
 }
 
 /* HEADER */
 header {
-    background: black;
+    background: rgba(0, 0, 0, 0.8); /* Added opacity for better contrast */
     color: #ffffff;
     text-align: center;
     padding: 15px 0;
@@ -22,17 +28,12 @@ header {
     z-index: 1000;
 }
 
-header h1 {
-    margin: 0;
-    font-size: 22px;
-    color: skyblue;
-}
-
 /* NAVIGATION */
 nav ul {
     list-style: none;
     padding: 0;
     text-align: center;
+    font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
 }
 
 nav ul li {
@@ -45,10 +46,15 @@ nav ul li a {
     text-decoration: none;
     font-size: 16px;
     font-weight: bold;
+    transition: color 0.3s ease;
 }
 
 nav ul li a:hover {
     color: skyblue;
+}
+
+nav ul li a:focus {
+    color: lightblue; /* Add focus styling for accessibility */
 }
 
 /* MAIN CONTENT */
@@ -64,6 +70,49 @@ section {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
+.media-section {
+    background: #ffffff;
+    padding: 20px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.media-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.media-container img, .media-container video, .media-container audio {
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.media-section {
+    width: 100%;
+    max-width: 900px; /* Limits the width of the media section */
+    margin: 0 auto; /* Centers the media section */
+    padding: 20px;
+}
+
+.media-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.media-container img, .media-container video, .media-container audio {
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    max-width: 300px; /* Limits the width of the media items */
+    margin: 0 10px;
+}
+
+
 .center-text {
     text-align: center;
 }
@@ -73,7 +122,17 @@ section {
     font-size: 24px;
     font-weight: bold;
 }
-/* FOR REGISTER PAGE */
+
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 5px 0px;
+    background: rgba(0, 0, 0, 0.8); /* Added opacity */
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+}
+
+/* REGISTER PAGE */
 * {
     margin: 0;
     padding: 0;
@@ -90,10 +149,9 @@ section {
     background-image: url("bg.jpg");
     background-repeat: no-repeat;
     background-position: center;
-    background-size: cover; /* Ensures full screen coverage */
-    background-attachment: fixed; /* Keeps the image in place while scrolling */
+    background-size: cover;
+    background-attachment: fixed;
 }
-
 
 .wrapper {
     width: 400px;
@@ -110,11 +168,11 @@ section {
     margin-bottom: 20px;
 }
 
-.login{
+.login {
     color: black;
     font-family: Georgia, 'Times New Roman', Times, serif;
-  
 }
+
 .wrapper .input-box {
     position: relative;
     width: 100%;
@@ -185,6 +243,11 @@ section {
     box-shadow: 0 0 8px rgba(255, 165, 0, 0.7);
 }
 
+.register {
+    color: black;
+    font-family: 'Times New Roman', Times, serif;
+}
+
 .register-link {
     margin-top: 20px;
     font-size: 14px;
@@ -203,7 +266,15 @@ section {
 /* RESPONSIVE DESIGN */
 @media (max-width: 450px) {
     .wrapper {
-        width: 1%;
+        width: 90%; /* Adjusted width for smaller screens */
         padding: 20px;
+    }
+
+    nav ul {
+        font-size: 14px;
+    }
+
+    header {
+        padding: 10px 0;
     }
 }
