@@ -13,14 +13,14 @@ header {
     text-align: center;
 }
 
-header h1{
-   margin: 30px;
+header h1 {
+    margin: 30px;
 }
-
 
 nav ul {
     list-style: none;
     padding: 0;
+    text-align: center;
 }
 
 nav ul li {
@@ -31,6 +31,12 @@ nav ul li {
 nav ul li a {
     color: #ffffff;
     text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s;
+}
+
+nav ul li a:hover {
+    color: skyblue;
 }
 
 main {
@@ -45,54 +51,65 @@ section {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-footer {
-    text-align: center;
-    padding: 5px 0px;
-    background: black;
-    color: #ffffff;
-
-}
-
-#red{
+#red {
     text-align: center;
 }
 
-h1{
+h1 {
     color: skyblue;
 }
 
-#myN{
-    color: Red;
+#myN {
+    color: red;
+}
+html, body {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1; /* Pushes the footer to the bottom */
+}
+
+footer {
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    background: black;
+    
 }
 
 
 
-/* FOR LOGIN PAGE */
-
+/* GENERAL STYLES */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
 }
 
-#body {
+body {
+    font-family: Arial, sans-serif;
     display: flex;
-    justify-content: center;
-    align-items: center;
+    flex-direction: column;
     min-height: 100vh;
     background: linear-gradient(135deg, #2ecc71, #16a085);
     background-image: url("bg.jpg");
     background-repeat: no-repeat;
     background-position: center;
-    background-size: cover; /* Ensures full screen coverage */
-    background-attachment: fixed; /* Keeps the image in place while scrolling */
+    background-size: cover;
+    background-attachment: fixed;
+    justify-content: center;
+    align-items: center;
+    padding: 20px; /* Prevents elements from touching screen edges */
 }
 
-
+/* LOGIN CONTAINER */
 .wrapper {
-    width: 400px;
-    bbackground: rgba(177, 17, 177, 0.9); /* Semi-transparent purple */
+    width: 100%;
+    max-width: 400px;
+    background: rgba(177, 17, 177, 0.9);
     color: white;
     padding: 30px;
     border-radius: 12px;
@@ -101,17 +118,14 @@ h1{
     backdrop-filter: blur(10px);
 }
 
+/* HEADINGS */
 .wrapper h1 {
-    font-size: 30px;
+    font-size: 28px;
     margin-bottom: 20px;
 }
 
-.login{
-    color: black;
-    font-family: Georgia, 'Times New Roman', Times, serif;
-  
-}
-.wrapper .input-box {
+/* INPUT FIELDS */
+.input-box {
     position: relative;
     width: 100%;
     margin: 20px 0;
@@ -138,6 +152,7 @@ h1{
     box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
 }
 
+/* ICONS */
 .input-box i {
     position: absolute;
     right: 23px;
@@ -147,6 +162,7 @@ h1{
     color: white;
 }
 
+/* REMEMBER ME & FORGOT PASSWORD */
 .remember-forgot {
     display: flex;
     justify-content: space-between;
@@ -163,6 +179,7 @@ h1{
     text-decoration: underline;
 }
 
+/* LOGIN BUTTON */
 .btn {
     width: 100%;
     height: 50px;
@@ -178,9 +195,10 @@ h1{
 
 .btn:hover {
     background: skyblue;
-    box-shadow: 0 0 8px rgba(255, 165, 0, 0.7);
+    box-shadow: 0 0 8px rgba(135, 206, 250, 0.7);
 }
 
+/* REGISTER LINK */
 .register-link {
     margin-top: 20px;
     font-size: 14px;
@@ -196,10 +214,47 @@ h1{
     text-decoration: underline;
 }
 
+/* FOOTER */
+footer {
+    text-align: center;
+    padding: 10px;
+    background: black;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+    margin-top: auto;
+    width: 100%;
+}
+
 /* RESPONSIVE DESIGN */
-@media (max-width: 450px) {
+@media screen and (max-width: 768px) {
+    body {
+        padding: 10px;
+        align-items: flex-start; /* Prevents weird centering issues */
+    }
+
     .wrapper {
-        width: 1%;
+        width: 95%;
+        max-width: 380px;
         padding: 20px;
     }
+
+    .input-box input {
+        font-size: 14px;
+        padding: 12px 40px 12px 15px; /* Adjust input padding */
+    }
+
+    .btn {
+        font-size: 16px;
+        height: 45px;
+    }
+
+    .remember-forgot {
+        font-size: 12px;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 5px;
+    }
+}
+
 }
