@@ -1,6 +1,7 @@
 /* General Styling */
 html {
     scroll-behavior: smooth;
+    scroll-padding: 70px;
 }
 
 body {
