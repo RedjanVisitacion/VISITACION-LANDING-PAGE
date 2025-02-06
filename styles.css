@@ -34,11 +34,12 @@ header {
 .hName{
     position: absolute;
     left: 20px;
+    top: 15%;
     color: rgb(89, 143, 224);
     font-size: x-large;
     font-style: italic;
     font-family: 'Times New Roman', Times, serif;
-    padding-top: 30px;
+    padding-top: 0px;
     
 }
 
