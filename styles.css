@@ -33,12 +33,12 @@ header {
 
 .hName{
     position: absolute;
-    left: 40px;
+    left: 20px;
     color: rgb(89, 143, 224);
     font-size: x-large;
     font-style: italic;
     font-family: 'Times New Roman', Times, serif;
-    padding-top: 20px;
+    padding-top: 30px;
     
 }
 
