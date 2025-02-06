@@ -46,6 +46,10 @@ header {
     cursor: pointer;
 }
 
+progress{
+    width: 50%;
+}
+
 /* Navigation */
 nav {
     display: flex;
