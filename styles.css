@@ -130,7 +130,7 @@ main {
 }
 
 section {
-    background: #ffffff;
+    background: rgb(148, 148, 214, 0.5);
     padding: 20px;
     margin-bottom: 25px;
     border-radius: 8px;
