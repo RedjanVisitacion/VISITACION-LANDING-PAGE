@@ -1,3 +1,6 @@
+/* font */
+@import url('https://fonts.googleapis.com/css2?family=Dosis:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+
 /* General Styling */
 html {
     scroll-behavior: smooth;
@@ -94,6 +97,119 @@ nav ul li a:focus {
     top: 0px;
     right: 20px;
 }
+/* Home Section */
+.home {
+    height: 100vh; /* Adjusted for better full-screen view */
+    width: 100%;
+    background: url(bg.jpg) no-repeat center/cover;
+    background-attachment: fixed; /* Parallax effect */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    padding: 50px 20px;
+    border-radius: 0;
+}
+
+/* Decorative Shape */
+.home::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    z-index: 50;
+    height: 150px;
+    background: url(shape.png) repeat-x;
+    width: 100%;
+    background-size: contain;
+}
+
+/* Fix media query */
+@media (min-width: 480px) {
+    .home::after {
+        height: 78px;
+    }
+}
+@media (min-width: 576px) {
+    .home::after {
+        height: 105px;
+    }
+}
+@media (min-width: 768px) {
+    .home::after {
+        height: 135px;
+    }
+}
+@media (min-width: 992px) {
+    .home::after {
+        height: 160px;
+    }
+}
+@media (min-width: 1200px) {
+    .home::after {
+        height: 180px;
+    }
+}
+
+/* Text Styles */
+.home .text {
+    max-width: 600px;
+    color: white;
+}
+
+.home .text p {
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+.home .text p span {
+    display: inline-block;
+    height: 2px;
+    width: 70px;
+    background-color: #fff;
+    opacity: 0.5;
+    margin: 0 10px;
+}
+
+.home .text h1 {
+    font-size: 45px;
+    font-weight: 800;
+    margin-bottom: 20px;
+}
+
+.home .text ul {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 30px;
+    padding: 0;
+}
+
+.home .text ul li {
+    list-style: none;
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* Button Style */
+.btn {
+    display: inline-block;
+    background: #ff6600;
+    color: white;
+    padding: 12px 20px;
+    font-size: 18px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: 0.3s ease-in-out;
+}
+
+.btn:hover {
+    background: #e55a00;
+}
+
+
 
 /* Mobile Navigation */
 @media (max-width: 768px) {
