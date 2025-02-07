@@ -16,14 +16,14 @@
 <body id="body">
   <div class="wrapper">
     <!-- LOGIN FORM -->
-    <form id="loginForm">
+    <form id="loginForm" onsubmit="login(event)">
       <h1 class="login">Login</h1>
       <div class="input-box">
-        <input type="text" placeholder="Username" required>
+        <input type="text" id="loginUsername" placeholder="Username" required>
         <i class='bx bxs-user'></i>
       </div>
       <div class="input-box">
-        <input type="password" placeholder="Password" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
         <i class='bx bxs-lock-alt'></i>
       </div>
       <div class="remember-forgot">
@@ -37,22 +37,22 @@
     </form>
 
     <!-- REGISTER FORM -->
-    <form id="registerForm" class="hidden">
+    <form id="registerForm" class="hidden" onsubmit="register(event)">
       <h1 class="register">Register</h1>
       <div class="input-box">
-        <input type="text" placeholder="Username" required>
+        <input type="text" id="regUsername" placeholder="Username" required>
         <i class='bx bxs-user'></i>
       </div>
       <div class="input-box">
-        <input type="email" placeholder="Email" required>
+        <input type="email" id="regEmail" placeholder="Email" required>
         <i class='bx bxs-envelope'></i>
       </div>
       <div class="input-box">
-        <input type="password" placeholder="Password" required>
+        <input type="password" id="regPassword" placeholder="Password" required>
         <i class='bx bxs-lock-alt'></i>
       </div>
       <div class="input-box">
-        <input type="password" placeholder="Confirm Password" required>
+        <input type="password" id="regConfirmPassword" placeholder="Confirm Password" required>
         <i class='bx bxs-lock-alt'></i>
       </div>
       <button type="submit" class="btn">Register</button>
@@ -66,6 +66,38 @@
     function toggleForms() {
       document.getElementById("loginForm").classList.toggle("hidden");
       document.getElementById("registerForm").classList.toggle("hidden");
+    }
+
+    function register(event) {
+      event.preventDefault();
+      let username = document.getElementById("regUsername").value;
+      let email = document.getElementById("regEmail").value;
+      let password = document.getElementById("regPassword").value;
+      let confirmPassword = document.getElementById("regConfirmPassword").value;
+
+      if (password !== confirmPassword) {
+        alert("Passwords do not match!");
+        return;
+      }
+
+      let user = { username, email, password };
+      localStorage.setItem(username, JSON.stringify(user));
+      alert("Registration successful! You can now log in.");
+      toggleForms();
+    }
+
+    function login(event) {
+      event.preventDefault();
+      let username = document.getElementById("loginUsername").value;
+      let password = document.getElementById("loginPassword").value;
+
+      let user = JSON.parse(localStorage.getItem(username));
+      if (user && user.password === password) {
+        alert("Login successful! Welcome, " + username);
+        window.location.href = "RPSV_CODES.html";
+      } else {
+        alert("Invalid username or password.");
+      }
     }
   </script>
 </body>
