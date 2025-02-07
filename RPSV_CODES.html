@@ -1,30 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <style>
+    .dot{
+        color: white;
+    }
+</style>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="styles.css">
-    <link rel="icon" href="icon.png">
     <title>RPSV_CODES</title>
+    <link rel="icon" href="icon.png">
+    <!-- link file icon -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+
+    <!-- Link Swiper's CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
+
+    <!-- link file css -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-            <div class="hName">
-                <b >RPSV_CODES</b>
-                
-            </div>
-            <ul id="navMenu">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#about">About</a></li>
-                <li><a href="#services">Services</a></li>
-                <li><a href="#pages">Pages</a></li>
-                <li><a href="#blog">Blog</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-        </nav>
-    </header>
+    <div class="header">
+        <div class="contanier">
+            <i id="btnMenu" class="fa-solid fa-bars"></i>
+            <nav>
+                <img src="logo.png" alt="">
+                <div class="nav-links">
+                    <a href="#home" class="active">Home</a>
+                    <a href="#about">About</a>
+                    <a href="#Service">Services</a>
+                    <a href="#Blog">Blog</a>
+                    <a href="#Pages">Pages</a>
+                    <a href="#Contacts">Contacts</a>
+                </div>
+            </nav>
+        </div>
+    </div>
 
     <!-- start Home  -->
 
@@ -34,9 +46,10 @@
                 <p>Hello <span></span> I am</p>
                 <h1>Redjan Phil S. Visitacion</h1>
                 <ul>
-                    <li>A BSIT student</li>
+                    <li>A BSIT Student</li>
                     <li>Editor</li>
                     <li>Programmer</li>
+                    <li>Photographer</li>
                 </ul>
                 <a href="#" class="btn" onClick="javascript:window.open('All about Redjan(RESUME).docx', '_blank');">Download My Data</a>
             </div>
@@ -44,35 +57,113 @@
     </section>
 
 
-    <main>
+    <!-- start About -->
 
-        <section id="about">
-            <h2>ABOUT</h2>
-            <p class="center-text">I am passionate about programming and technology.</p>
-        
+    <section class="about" id="about">
+        <div class="sec-top">
+            <span>about</span>
+        </div>
 
-            <label for="Programming">Programming</label>
-            <progress id="Programming" value="40" max="100"></progress>
-        </section>
+        <div class="contanier">
 
-        <section id="services">
-            <h2>SERVICES</h2>
-            <p class="center-text">I offer services in:</p>
-            <h3 class="center-text">Programming, Photography, Editing</h3>
-        </section>
+            <div class="content">
+                <div class="text">
+                    <h3>About Me</h3>
+                    <span>I am BSIT student Creative Designer Photographer and Developer</span>
+                    <p>Self-motivation is the force that keeps pushing us to go on – it's our internal drive to achieve, produce, develop, and keep moving forward. When you think you're ready to quit something, or you just don't know how to start, your self-motivation is what pushes you to go on. Most good programmers do programming not because they expect to get paid or get adulation by the public, but because it is fun to program.</p>
+                           <img src="sign.png" alt="">
 
-        <section id="pages">
-            <h2>PAGES</h2>
-            <p class="center-text">Contact me via my Facebook account:</p>
-            <p class="center-text">
-                <a target="_blank" href="https://www.facebook.com/profile.php?id=100080078753987">CLICK HERE</a>
-            </p>
-        </section>
+                </div>
+                <div class="div-img">
+                    <img src="about.png" alt="">
+                </div>
+            </div>
+            
 
-        <section id="blog">
-            <h2>BLOG</h2>
-            <p class="center-text">Welcome to my blog section! Stay tuned for updates.</p>
-        
+
+            <section class="Service" id="Service">
+                <div class="sec-top">
+            <span>Services</span>
+        </div>
+            <div class="cont2">
+
+                <div class="promo-number">
+
+                    <div class="small-box bord-rig bord-botm">
+                        <span>0</span>
+                        <p>All Ex</p>
+                    </div>
+
+                    <div class="small-box bord-botm">
+                        <span>3</span>
+                        <p>Years Experience</p>
+                    </div>
+
+
+                    
+                    <div class="small-box bord-rig">
+                        <span>0</span>
+                        <p>Girl Friend</p>
+                    </div>
+
+                    <div class="small-box">
+                        <span>1</span>
+                        <p>NCII holder</p>
+                    </div>
+
+                </div>
+
+                <div class="skill-with-social">
+
+                    <div class="skill-list">
+                  
+                        <h3 class="heading">My Skills</h3>
+
+                        <div class="single-skill">
+
+                            <div class="skill-title">
+                                <h3>Being Active on Social Media</h3>
+                                <span>95%</span>
+                            </div>
+
+                            <div class="progress">
+                                <div style="width: 95%;" class="progress-bar"></div>
+                            </div>
+                        </div>
+
+                        <div class="single-skill">
+                            
+                            <div class="skill-title">
+                                <h3>Video Editor</h3>
+                                <span>80%</span>
+                            </div>
+
+                            <div class="progress">
+                                <div style="width: 80%;" class="progress-bar"></div>
+                            </div>
+                        </div>
+
+                        <div class="single-skill">
+                            
+                            <div class="skill-title">
+                                <h3>Programmer</h3>
+                                <span>85%</span>
+                            </div>
+
+                            <div class="progress">
+                                <div style="width: 85%;"  class="progress-bar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </section>  
+                
+                <!-- Blog -->
+                
+                <section class="Contacts" id="Blog">
+                    <div class="sec-top">  
+                  <span>Blog</span>
+                    <div class="">
+                       
             <!-- Pictures Section -->
             <section id="S2" class="media-section">
                 <h3 class="center-text">My Pictures</h3>
@@ -108,44 +199,66 @@
                     </audio>
                 </div>
             </section>
-        </section>
-        
-        <section id="contact">
-            <h2>CONTACT</h2>
-            <p class="center-text">Get in touch with me.</p>
-        </section>
-    </main>
 
-    
-    <footer>
-        <p>&copy; 2025 Redjan Phil S. Visitacion | Owner of this landing page</p>
-    </footer>
 
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const menuToggle = document.querySelector(".menu-toggle");
-            const navMenu = document.querySelector("nav ul");
+                    </div>
+                </section>
+
+
+                <!-- Pages -->
+                
+                <section class="Contacts" id="Pages">
+                    <div class="sec-top">  
+                  <span>Pages</span>
+                    <div class="">
+                       
+
+                        <p >Under Construction</p>
+                
+
+
+                    </div>
+                </section>
+
+   
+       <!-- Contacts -->
+
+          <section class="Contacts" id="Contacts">
+              <div class="sec-top">  
+            <span>Contacts</span>
+        </div>
+                    <div class="social-status">
+                        <h3 class="heading">Follow Me on:</h3>
+
+                        <div class="social-profile-list">
+                            <a href="https://www.instagram.com/redjanphilsvisitacion?igsh=MXF2c2t5ZGttanJjeA=="><i class="fab fa-instagram"></i></a>
+                            <a href="https://www.facebook.com/profile.php?id=100080078753987"><i class="fab fa-facebook-f"></i></a>
+                            <a href="https://www.tiktok.com/@rpsv_codes?_t=8k15sq4ZSew&_r=1"><i class="fab fa-tiktok"></i></a>
+                            <a href="https://www.youtube.com/@redjanvisitacion5570"><i class="fab fa-youtube"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </section>
+
+     <!-- Footer -->
+
+   <footer>
+    <p>&copy; 2025 Redjan Phil S. Visitacion | Owner of this landing page</p>
+   </footer>
     
-            menuToggle.addEventListener("click", function () {
-                navMenu.classList.toggle("active");
-            });
-    
-            // Close menu when clicking a link
-            document.querySelectorAll("nav ul li a").forEach(link => {
-                link.addEventListener("click", function () {
-                    navMenu.classList.remove("active");
-                });
-            });
-    
-            // Close menu when clicking outside of it
-            document.addEventListener("click", function (event) {
-                if (!navMenu.contains(event.target) && !menuToggle.contains(event.target)) {
-                    navMenu.classList.remove("active");
-                }
-            });
-        });
-    </script>
-    
-    
+
+
+
+
+    <!-- Swiper JS -->
+  <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
+
+    <!-- link file JS -->
+    <script src="main.js"></script>
 </body>
 </html>
