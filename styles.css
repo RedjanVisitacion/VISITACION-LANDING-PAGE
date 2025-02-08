@@ -44,7 +44,7 @@ section{
 .sec-top span{
     font-size: 40px;
     padding-bottom: 10px;
-    border-bottom: 4px solid #61c6ee;
+    border-bottom: 4px solid #3ea7c7;
     font-family: var(--font-Dosis);
     font-weight: 700;
     text-transform: capitalize;
@@ -64,7 +64,7 @@ h1,h2,h3,h4,h5,h6{
 
 .btn{
     color: #fff;
-    background-color: white;
+    background-color: var(--blue);
     border-radius: 5px;
     padding: 18px 50px;
     font-weight: 700;
@@ -85,12 +85,12 @@ h1,h2,h3,h4,h5,h6{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 7px;
+    height: 70PX;
 }
 .header nav .nav-links a{
-    color: #fafafa;
-    font-weight: 600;
-    padding: 0 18px;
+    color: #fdfafa;
+    font-weight: 500;
+    padding: 0 17px;
     text-transform: capitalize;
 }
 .header nav .nav-links a:hover,
@@ -100,9 +100,8 @@ h1,h2,h3,h4,h5,h6{
 
 /* now we will add class active to header on scroll*/
 .header.active{
-    background-color: rgba(255, 255, 255, 0.9);
-    border-bottom: 2px solid #14c7df4d;
-    box-shadow: #000;
+    background-color: #fff;
+    border-bottom: 1px solid #7272724d;
 }
 .header.active nav .nav-links a{
     color: var(--p-color);
