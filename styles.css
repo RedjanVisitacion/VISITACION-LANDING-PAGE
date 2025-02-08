@@ -44,7 +44,7 @@ section{
 .sec-top span{
     font-size: 40px;
     padding-bottom: 10px;
-    border-bottom: 4px solid #ffffff;
+    border-bottom: 4px solid #61c6ee;
     font-family: var(--font-Dosis);
     font-weight: 700;
     text-transform: capitalize;
@@ -85,7 +85,7 @@ h1,h2,h3,h4,h5,h6{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 70px;
+    height: 7px;
 }
 .header nav .nav-links a{
     color: #fafafa;
