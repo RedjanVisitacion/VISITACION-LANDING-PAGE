@@ -324,33 +324,123 @@ h1,h2,h3,h4,h5,h6{
     top: -7px;
 }
 /* start services */
-
-.services .boxs .box{
-    background-color: #f3f3f3;
+/* Responsive Services Section */
+.services {
+    padding: 60px 5%;
     text-align: center;
-    padding: 50px 10px;
+    background: #f9f9f9;
+}
+
+.services .sec-top span {
+    font-size: 30px;
+    font-weight: bold;
+    color: var(--blue);
+    display: block;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* Service Box Container */
+.services .boxs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+    padding: 20px 5%;
+}
+
+/* Individual Service Box */
+.services .boxs .box {
+    background: linear-gradient(135deg, #ffffff, #f1f1f1);
+    text-align: center;
+    padding: 30px;
     position: relative;
-    box-shadow: 3px 3px 8px #a0a0a0d5;
-    top: 0;
+    border-radius: 15px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.services .boxs .box:hover{
-    top: -15px;
-    box-shadow: 5px 5px 10px #a0a0a099,
-    -5px 5px 10px #a0a0a099;
+
+.services .boxs .box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
 }
-.services .boxs .box i{
+
+.services .boxs .box i {
     font-size: 45px;
     color: var(--blue);
-    margin-bottom: 20px;
+    margin-bottom: 15px;
 }
-.services .boxs .box h2{
-    font-size: 28px;
-    margin-bottom: 20px;
+
+.services .boxs .box h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #333;
 }
-.services .boxs .box p{
-    color: var(--p-color);
-    line-height: 1.8;
+
+.services .boxs .box p {
+    color: #666;
+    font-size: 16px;
+    line-height: 1.6;
+    padding: 0 10px;
 }
+
+/* Progress Bar Effects */
+.progress {
+    width: 100%;
+    height: 10px;
+    background-color: #ddd;
+    border-radius: 5px;
+    overflow: hidden;
+    position: relative;
+    margin-top: 10px;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--blue), var(--pink));
+    width: 0;
+    transition: width 1.5s ease-in-out;
+}
+
+@keyframes fillProgress {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+.progress-bar.animated {
+    animation: fillProgress 1.5s forwards;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .services {
+        padding: 40px 5%;
+    }
+
+    .services .sec-top span {
+        font-size: 26px;
+    }
+
+    .cont2 {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .promo-number {
+        order: 1;
+    }
+
+    .skill-with-social {
+        order: 2;
+        margin-top: 20px;
+    }
+}
+
+
 /* start portfolio */
 
 .portfolio .menu-portf{
