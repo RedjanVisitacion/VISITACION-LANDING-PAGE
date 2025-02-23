@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Background</title>
+    <style>
+        /* Fullscreen Background */
+        body {
+            margin: 0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: black;
+        }
+
+        /* Main Background Image */
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('bg.jpg') center/cover no-repeat;
+            animation: moveBg 10s infinite linear;
+        }
+
+        /* Smoke Effect */
+        .smoke {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('bg.jpg') center/cover no-repeat;
+            opacity: 0.3;
+            animation: moveSmoke 15s infinite linear alternate;
+        }
+
+        /* Fire Effect */
+        .fire {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            width: 100%;
+            height: 50%;
+            background: url('fire.gif') center/cover no-repeat;
+            opacity: 0.5;
+            transform: translateX(-50%);
+            animation: flicker 2s infinite alternate;
+        }
+
+        /* Water/Waves Effect */
+        .waves {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 30%;
+            background: url('waves.gif') repeat-x;
+            opacity: 0.4;
+            animation: waveMotion 8s infinite linear;
+        }
+
+        /* Background Movement */
+        @keyframes moveBg {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Smoke Animation */
+        @keyframes moveSmoke {
+            0% { transform: translateY(0); opacity: 0.2; }
+            100% { transform: translateY(-10%); opacity: 0.5; }
+        }
+
+        /* Fire Flickering */
+        @keyframes flicker {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.6; }
+        }
+
+        /* Water Wave Motion */
+        @keyframes waveMotion {
+            0% { background-position: 0 0; }
+            100% { background-position: 1000px 0; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="background"></div> <!-- Main Background -->
+    <div class="smoke"></div>      <!-- Smoke Effect -->
+    <div class="fire"></div>       <!-- Fire Effect -->
+    <div class="waves"></div>      <!-- Water Waves -->
+
+</body>
+</html>
