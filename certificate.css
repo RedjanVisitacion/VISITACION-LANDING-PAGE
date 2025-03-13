@@ -1,0 +1,75 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 7px 10px 3px 10px;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-image: url('redjan1.png');
+  text-align: center;
+}
+
+.certificate {
+  background-image: url('redjan1.png');
+  /*background-color: pink;*/
+  margin: 90px 0px 0px 0px;
+  padding: 10px 20px 15px 20px;
+  border: 0.1px solid white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+h1, h2, h3, h4 {
+  margin: 5px 0;
+}
+
+.say{
+  margin: 0px 0px 20px 0px ;
+}
+
+p {
+  margin: 10px 0;
+}
+
+.button{
+  margin-top: 20px;
+
+}
+
+#backToHome {
+  background-color: gray; /* Green */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 0px 10px 0px 0px;
+  cursor: pointer;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#downloadBtn {
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-top: 0px;
+  cursor: pointer;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#downloadBtn:hover {
+  background-color: skyblue;
+  color: white;
+}
+
+
