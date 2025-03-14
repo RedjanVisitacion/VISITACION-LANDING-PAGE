@@ -30,12 +30,13 @@ body {
   font-size: 70px;
   font-weight: bold;
   color: rgb(255, 255, 255);
-  text-shadow: 2px 2px 5px rgb(172, 172, 172);
+  text-shadow: 2px 2px 5px rgb(0, 0, 0);
 }
 
 .text{
   font-size: 30px;
-  color: rgb(188, 191, 192);
+  color: rgb(255, 255, 255);
+  text-shadow: 2px 2px 5px rgb(172, 172, 172);
 }
 
 /* Heading */
@@ -44,12 +45,12 @@ body {
   font-weight: bold;
   color: darkblue;
   text-transform: uppercase;
-  text-shadow: 1px 1px 4px gray;
+  text-shadow: 1px 1px 4px rgb(197, 79, 32);
 }
 
 /* Recipient Name */
 #recipientName {
-  font-size: 42px;
+  font-size: 50px;
   font-weight: bold;
   color: #129ddd;
   margin-top: 10px;
@@ -59,16 +60,17 @@ body {
 
 /* Course Name */
 #courseName {
-  font-size: 26px;
+  font-size: 30px;
   color: darkred;
   font-weight: bold;
   text-transform: uppercase;
+  text-shadow: 2px 2px 5px rgb(255, 255, 255);
 }
 
 /* Date */
 #date {
   font-size: 22px;
-  color: darkgray;
+  color: rgba(255, 251, 11, 0.651);
   font-style: italic;
 }
 
