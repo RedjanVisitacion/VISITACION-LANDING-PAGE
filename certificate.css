@@ -1,6 +1,6 @@
 /* General Styles */
 :root{
-  --blue:hsl(216, 56%, 50%);
+  --blue:rgb(212, 39, 68);
 }
 
 body {
