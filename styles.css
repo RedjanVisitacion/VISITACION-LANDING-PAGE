@@ -63,6 +63,7 @@ h1,h2,h3,h4,h5,h6{
 
 
 .btn{
+   
     color: #fff;
     background-color: var(--blue);
     border-radius: 5px;
@@ -772,6 +773,7 @@ footer {
 }
 
 .cv-button {
+    margin-left: 10px;
     background: linear-gradient(45deg, #007bff, #00c6ff);
     color: white;
     padding: 12px 24px;

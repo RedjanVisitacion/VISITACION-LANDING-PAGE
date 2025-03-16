@@ -1,4 +1,8 @@
 /* General Styles */
+:root{
+  --blue:hsl(216, 56%, 50%);
+}
+
 body {
   font-family: 'Poppins', sans-serif;
   background: linear-gradient(to right, #1a1a1a, #333); /* Darker background */
@@ -26,9 +30,9 @@ body {
   max-width: 900px;
   margin: auto;
   padding: 30px;
-  border: 8px solid gold;
+  border: 8px var(--blue);
   border-radius: 10px;
-  box-shadow: 0 5px 20px rgba(255, 215, 0, 0.5); /* Gold glow effect */
+  box-shadow: 0 5px 20px var(--blue); /* Gold glow effect */
   text-align: center;
 }
 
@@ -49,13 +53,13 @@ body {
   font-size: 30px;
   font-weight: bold;
   color: #fff; /* White for emphasis */
-  text-shadow: 2px 2px 5px rgba(255, 215, 0, 0.7); /* Gold shadow effect */
+  text-shadow: 2px 2px 5px var(--blue); /* Gold shadow effect */
 }
 
 .course-name {
   font-size: 26px;
   font-weight: bold;
-  color: #ffcc00; /* Gold color */
+  color: var(--blue); /* Gold color */
 }
 
 .date {
@@ -69,8 +73,8 @@ body {
 }
 
 button {
-  background: #ffcc00;
-  color: #222;
+  background: var(--blue);
+  color: #ffffff;
   padding: 12px 20px;
   font-size: 16px;
   font-weight: bold;
@@ -81,7 +85,7 @@ button {
 }
 
 button:hover {
-  background: #ffdb4d; /* Lighter gold on hover */
+  background: var(--blue); /* Lighter gold on hover */
 }
 
 /* Name Input Modal */
@@ -103,7 +107,7 @@ button:hover {
   padding: 30px;
   border-radius: 15px;
   text-align: center;
-  box-shadow: 0px 0px 20px rgba(255, 215, 0, 0.4);
+  box-shadow: 0px 0px 20px var(--blue);
 }
 
 h2 {
@@ -116,7 +120,7 @@ input {
   padding: 12px;
   font-size: 16px;
   margin: 10px 0;
-  border: 2px solid #ffcc00;
+  border: 2px solid var(--blue);
   border-radius: 5px;
   text-align: center;
 }
