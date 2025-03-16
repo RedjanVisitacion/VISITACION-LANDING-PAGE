@@ -1,7 +1,7 @@
 /* font */
 @import url('https://fonts.googleapis.com/css2?family=Dosis:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
 :root{
-    --blue :hsl(216, 56%, 50%);
+    --blue :rgb(212, 39, 68);
     --black: #000;
     --p-color: #393939;
     --font-Dosis: 'Dosis', sans-serif;
