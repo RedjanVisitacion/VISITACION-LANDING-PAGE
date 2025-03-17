@@ -324,7 +324,7 @@ h1,h2,h3,h4,h5,h6{
     background-color: #000;
     top: -7px;
 }
-/* start services */
+
 /* Responsive Services Section */
 .services {
     padding: 60px 5%;
@@ -640,6 +640,173 @@ h1,h2,h3,h4,h5,h6{
     margin: 10px 0;
 }
 
+
+/* Contact Section */
+.Contacts {
+    background: rgba(20,20,20,255)
+    ;
+    color: #fff;
+    padding: 60px 0;
+    text-align: center;
+    padding-bottom: 30px;
+}
+
+
+
+/* Container */
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 0 20px;
+    text-align: center;
+    
+}
+
+/* Contact Content */
+.contact-content h2 {
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    color: var(--blue); /* Pink */
+}
+
+.contact-content p {
+    font-size: 18px;
+    color: #e0e0e0;
+    margin-bottom: 30px;
+    max-width: 700px;
+    margin: auto;
+}
+
+/* Contact Form */
+.contact-form {
+    background: rgba(255, 79, 139, 0.1); /* Light pink transparency */
+    padding: 22px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(255, 79, 139, 0.3);
+    width: 85%;
+    max-width: 420px; /* Keeps form compact */
+    margin: 20px auto;
+    text-align: center;
+    transition: 0.3s ease-in-out;
+}
+
+.contact-form:hover {
+    transform: scale(1.02);
+}
+
+/* Form Title */
+.contact-form h3 {
+    font-size: 22px;
+    margin-bottom: 12px;
+    color: var(--blue);
+}
+
+/* Form Fields */
+.contact-form input, 
+.contact-form textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 12px;
+    border: 2px solid var(--blue); /* Pink Border */
+    border-radius: 6px;
+    background: white;
+    color: black;
+    font-size: 15px;
+    outline: none;
+    transition: 0.3s ease;
+}
+
+.contact-form input:focus, 
+.contact-form textarea:focus {
+    border-color: #e04479;
+    background: #fff;
+}
+
+/* Submit Button */
+.contact-form button {
+    background: #ff4f8b;
+    color: white;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.contact-form button:hover {
+    background: #e04479;
+    transform: scale(1.05);
+}
+
+/* Social Media Section */
+.social-status {
+    margin-top: 25px;
+}
+
+.social-status h3 {
+    font-size: 22px;
+    margin-bottom: 12px;
+    color: white;
+}
+
+/* Social Media Links */
+.social-profile-list {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.social-profile-list a {
+    font-size: 28px;
+    color: #ff4f8b;
+    transition: 0.3s ease-in-out;
+}
+
+.social-profile-list a:hover {
+    color: #e04479;
+    transform: scale(1.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .contact-content h2 {
+        font-size: 28px;
+    }
+
+    .contact-content p {
+        font-size: 16px;
+    }
+
+    .contact-form {
+        width: 95%;
+        padding: 18px;
+    }
+
+    .contact-form h3 {
+        font-size: 20px;
+    }
+
+    .contact-form input, 
+    .contact-form textarea {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    .contact-form button {
+        font-size: 15px;
+        padding: 10px;
+    }
+
+    .social-profile-list a {
+        font-size: 26px;
+    }
+}
+
+
+
+
 .read-more {
     color: #e60f0f;
     text-decoration: none;
@@ -795,6 +962,7 @@ h1,h2,h3,h4,h5,h6{
     background-color: var(--blue);
     text-align: center;
     border-radius: 50%;
+    
 }
 .footer .content .item .cont-head h6{
     font-size: 22px;
@@ -802,6 +970,7 @@ h1,h2,h3,h4,h5,h6{
 
 .Contacts{
     padding-bottom: 20px;
+    
 }
 
 
