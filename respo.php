@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Email Setup
-    $to = "visitacionredjanphils@gmail.com"; // Replace with your actual email
+    $to = "visitacionredjanphils@gmail.com";
     $subject = "New Contact Message from $name";
     $body = "Name: " . htmlspecialchars($name) . "\n";
     $body .= "Email: " . htmlspecialchars($email) . "\n\n";
