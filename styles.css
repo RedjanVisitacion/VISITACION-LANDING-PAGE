@@ -719,13 +719,13 @@ h1,h2,h3,h4,h5,h6{
 
 .contact-form input:focus, 
 .contact-form textarea:focus {
-    border-color: #e04479;
+    border-color: var(--blue);
     background: #fff;
 }
 
 /* Submit Button */
 .contact-form button {
-    background: #ff4f8b;
+    background: var(--blue);
     color: white;
     padding: 12px;
     font-size: 16px;
@@ -736,7 +736,7 @@ h1,h2,h3,h4,h5,h6{
 }
 
 .contact-form button:hover {
-    background: #e04479;
+    background: var(--blue);
     transform: scale(1.05);
 }
 
@@ -760,12 +760,12 @@ h1,h2,h3,h4,h5,h6{
 
 .social-profile-list a {
     font-size: 28px;
-    color: #ff4f8b;
+    color:var(--blue);
     transition: 0.3s ease-in-out;
 }
 
 .social-profile-list a:hover {
-    color: #e04479;
+    color: var(--blue);
     transform: scale(1.2);
 }
 
