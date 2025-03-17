@@ -978,7 +978,7 @@ footer {
     align-items: center;
     min-height: 100vh;
     background: linear-gradient(135deg, #2ecc71, #16a085);
-    background-image: url("img/bgg.jpg");
+    background-image: url("img/bg.jpg");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -1001,7 +1001,7 @@ footer {
 }
 
 .login {
-    color: black;
+    color: var(--blue);
     font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
