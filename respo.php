@@ -1,9 +1,9 @@
 <?php
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Sanitize & Validate Input
-    $name = trim($_POST["name"]);
+    $name = htmlspecialchars(strip_tags(trim($_POST["name"])));
     $email = filter_var(trim($_POST["email"]), FILTER_SANITIZE_EMAIL);
-    $message = trim($_POST["message"]);
+    $message = htmlspecialchars(strip_tags(trim($_POST["message"])));
 
     // Check for empty fields
     if (empty($name) || empty($email) || empty($message)) {
@@ -18,22 +18,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Email Setup
-    $to = "visitacionredjanphils@gmail.com";
+    $to = "visitacionredjanphils@gmail.com"; // Replace with your email
     $subject = "New Contact Message from $name";
-    $body = "Name: " . htmlspecialchars($name) . "\n";
-    $body .= "Email: " . htmlspecialchars($email) . "\n\n";
-    $body .= "Message:\n" . htmlspecialchars($message);
+    
+    $body = "Name: $name\n";
+    $body .= "Email: $email\n\n";
+    $body .= "Message:\n$message";
 
-    $headers = "From: noreply@yourdomain.com\r\n"; // Use a domain email if possible
+    $headers = "From: your-email@example.com\r\n"; // Change to an actual email
     $headers .= "Reply-To: $email\r\n";
     $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
 
     // Send Email
-    if (mail($to, $subject, $body, $headers)) {
+    if (@mail($to, $subject, $body, $headers)) {
         echo "<script>alert('Your message has been sent successfully! Redirecting...'); 
               setTimeout(function() { window.location.href = 'index.html'; }, 2000); 
               </script>";
     } else {
+        error_log("Mail sending failed for $email to $to.");
         echo "<script>alert('Message sending failed. Please try again later.'); window.history.back();</script>";
     }
 } else {
