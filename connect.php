@@ -1,22 +1,27 @@
 <?php
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $message = $_POST['message'];
+// Get input values safely (with fallback for missing data)
+$name = isset($_POST['name']) ? $_POST['name'] : '';
+$email = isset($_POST['email']) ? $_POST['email'] : '';
+$message_text = isset($_POST['message']) ? $_POST['message'] : '';
 
+// Database Connection (PostgreSQL)
+$conn = pg_connect("host=localhost port=5432 dbname=your_dbname user=your_username password=your_password");
 
-    //Database Connection
+// Check connection
+if (!$conn) {
+    die("Connection failed: " . pg_last_error());
+}
 
-    $conn = new mysqli('localhost', 'root','','postgres');
-    if($conn->connect_error){
-        die('Connection Failed : ' .$conn->connect_error);
-    }else{
-        $stmt = $conn->prepare("insert into message(email,name,message_text) values(?,?,?)");
-        $stmt->bind_param("sssssi", $email,$name,$message_text);
-        $stmt->execute();
-        
-        echo("Submit Succesfully...");
-        $stmt->close();
-        $conn->close();
+// Insert Query (Use placeholders for security)
+$query = "INSERT INTO message (email, name, message_text) VALUES ($1, $2, $3)";
+$result = pg_query_params($conn, $query, array($email, $name, $message_text));
 
-    }
+if ($result) {
+    echo "Submitted Successfully...";
+} else {
+    echo "Error: " . pg_last_error($conn);
+}
+
+// Close connection
+pg_close($conn);
 ?>
