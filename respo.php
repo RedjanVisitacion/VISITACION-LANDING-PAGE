@@ -18,21 +18,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     // Email Setup
-    $to = "visitacionredjanphils@gmail.com"; // Replace with your email
+    $to = "visitacionredjanphils@gmail.com"; // Your email
     $subject = "New Contact Message from $name";
-    
+
     $body = "Name: $name\n";
     $body .= "Email: $email\n\n";
     $body .= "Message:\n$message";
 
-    $headers = "From: your-email@example.com\r\n"; // Change to an actual email
+    $headers = "From: no-reply@yourdomain.com\r\n"; // Replace with your domain email
     $headers .= "Reply-To: $email\r\n";
     $headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
 
     // Send Email
     if (@mail($to, $subject, $body, $headers)) {
-        echo "<script>alert('Your message has been sent successfully! Redirecting...'); 
-              setTimeout(function() { window.location.href = 'index.html'; }, 2000); 
+        echo "<script>
+                alert('Your message has been sent successfully! Redirecting...');
+                setTimeout(function() { window.location.href = 'index.html'; }, 2000); 
               </script>";
     } else {
         error_log("Mail sending failed for $email to $to.");
