@@ -1,14 +1,129 @@
-<!DOCTYPE html/>
-<html>
-    <head>
-        <title>PRACTICE</title>
-        <link rel="icon" href="img/icon.png">
-        <link rel="stylesheet" href="csss.css">
-    </head>
-    <body>
-            <p>My name is: <i><a href="https:www.github.com/RedjanVisitacion" target="_blank">REDJAN</a></i></p>
-            
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="img/icon.png">
+    <title>RPSV_Snake_Game</title>
+    <style>
+        body {
+            text-align: center;
+            background-color: #121212;
+            color: white;
+            font-family: Arial, sans-serif;
+        }
+        canvas {
+            border: 2px solid white;
+        }
+        #score {
+            font-size: 20px;
+            margin: 10px;
+        }
+        #restartBtn {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            background-color: lime;
+            border: none;
+            color: black;
+            font-weight: bold;
+        }
+        #gameOverMsg {
+            display: none;
+            font-size: 24px;
+            color: red;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>🐍 Redjan's Snake Game 🕹️</h1>
+    <p id="score">Score: 0</p>
+    <p id="gameOverMsg">Game Over! Click Restart to play again.</p>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <br>
+    <button id="restartBtn" onclick="restartGame()">Restart Game</button>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+        const scoreDisplay = document.getElementById("score");
+        const gameOverMsg = document.getElementById("gameOverMsg");
+        let snake = [{ x: 200, y: 200 }];
+        let direction = "RIGHT";
+        let food = { x: Math.floor(Math.random() * 20) * 20, y: Math.floor(Math.random() * 20) * 20 };
+        let gameOver = false;
+        let score = 0;
+        let speed = 200;
 
-            <script src="jss.js"></script>
-    </body>
+        function draw() {
+            if (gameOver) return;
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "red";
+            ctx.fillRect(food.x, food.y, 20, 20);
+            ctx.fillStyle = "lime";
+            snake.forEach(segment => ctx.fillRect(segment.x, segment.y, 20, 20));
+        }
+
+        function update() {
+            if (gameOver) return;
+            let head = { ...snake[0] };
+            if (direction === "UP") head.y -= 20;
+            if (direction === "DOWN") head.y += 20;
+            if (direction === "LEFT") head.x -= 20;
+            if (direction === "RIGHT") head.x += 20;
+            
+            if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height || snake.some(seg => seg.x === head.x && seg.y === head.y)) {
+                gameOver = true;
+                gameOverMsg.style.display = "block";
+                return;
+            }
+            
+            snake.unshift(head);
+            if (head.x === food.x && head.y === food.y) {
+                score += 1;
+                scoreDisplay.innerText = "Score: " + score;
+                food = { x: Math.floor(Math.random() * 20) * 20, y: Math.floor(Math.random() * 20) * 20 };
+                speed = Math.max(50, 200 - score * 5);
+                clearInterval(gameLoop);
+                gameLoop = setInterval(() => {
+                    update();
+                    draw();
+                }, speed);
+            } else {
+                snake.pop();
+            }
+        }
+
+        function changeDirection(event) {
+            if (event.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
+            if (event.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
+            if (event.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
+            if (event.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
+        }
+
+        function restartGame() {
+            snake = [{ x: 200, y: 200 }];
+            direction = "RIGHT";
+            food = { x: Math.floor(Math.random() * 20) * 20, y: Math.floor(Math.random() * 20) * 20 };
+            gameOver = false;
+            score = 0;
+            speed = 200;
+            scoreDisplay.innerText = "Score: " + score;
+            gameOverMsg.style.display = "none";
+            clearInterval(gameLoop);
+            gameLoop = setInterval(() => {
+                update();
+                draw();
+            }, speed);
+        }
+
+        document.addEventListener("keydown", changeDirection);
+        let gameLoop = setInterval(() => {
+            update();
+            draw();
+        }, speed);
+    </script>
+</body>
 </html>
