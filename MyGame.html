@@ -3,21 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Snake Game</title>
+    <title>RPSV_Snake-Game</title>
+    <link rel="icon" href="img/icon.png">
     <style>
         body {
             text-align: center;
-            background-color: #121212;
+            background-image: url('img/bgLog.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
             color: white;
             font-family: Arial, sans-serif;
+            position: relative;
         }
+        
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            filter: blur(8px);
+            z-index: -1;
+        }
+        
         canvas {
             border: 2px solid white;
+            position: relative;
+            z-index: 1;
         }
+        
         #score, #highScore {
             font-size: 20px;
             margin: 10px;
         }
+        
         #restartBtn, #pauseBtn {
             padding: 10px 20px;
             font-size: 16px;
@@ -26,23 +49,28 @@
             border: none;
             font-weight: bold;
         }
+        
         #restartBtn {
             background-color: lime;
             color: black;
         }
+        
         #pauseBtn {
             background-color: orange;
             color: black;
         }
+        
         #gameOverMsg {
             display: none;
             font-size: 24px;
             color: red;
             font-weight: bold;
         }
+        
         .controls {
             margin-top: 10px;
         }
+        
         .controls button {
             padding: 10px;
             margin: 5px;
