@@ -3,119 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RPSV_Snake-Game</title>
+    <title>RPSV_CODES_Snake-Game</title>
     <link rel="icon" href="img/icon.png">
 
     <link rel="stylesheet" href="styles.css">
-
     <style>
-        body {
-            text-align: center;
-            background-image: url('img/bgLog.png');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            background-repeat: no-repeat;
-            color: white;
-            font-family: Arial, sans-serif;
-            position: relative;
+
+        :root{
+          --blue :rgb(212, 39, 68);
         }
-        
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Times New Roman', Times, serif;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: url('img/bgLog.png') no-repeat center center/cover;
+            position: relative;
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+        }
         body::before {
             content: "";
-            position: fixed;
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             background: inherit;
-            filter: blur(8px);
+            filter: blur(10px);
             z-index: -1;
         }
-        
+
+        .title{
+            color: var(--blue);
+        }
+
+        #score{
+            color: white;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        #highScore{
+            color: rgba(28, 228, 28, 0.747);
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .game-container {
+            background: rgba(49, 49, 49, 0.473);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+        }
         canvas {
-            border: 2px solid white;
-            position: relative;
-            z-index: 1;
+            border: 4px solid white;
+            border-radius: 10px;
         }
-        
-        #score, #highScore {
-            font-size: 20px;
-            margin: 10px;
+        .info {
+            margin: 10px 0;
         }
-        
-        #restartBtn, #pauseBtn {
-            padding: 10px 20px;
-            font-size: 16px;
-            margin-top: 10px;
-            cursor: pointer;
-            border: none;
-            font-weight: bold;
-        }
-        
-        #restartBtn {
-            background-color: lime;
-            color: black;
-        }
-        
-        #pauseBtn {
-            background-color: orange;
-            color: black;
-        }
-        
-        #gameOverMsg {
-            display: none;
-            font-size: 24px;
-            color: red;
-            font-weight: bold;
-        }
-        
-        .controls {
-            margin-top: 10px;
-        }
-        
-        .controls button {
-            padding: 10px;
+        button {
+            padding: 12px 20px;
             margin: 5px;
             font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
+            transition: 0.3s;
         }
+        #restartBtn { background: lime; }
+        #pauseBtn { background: orange; }
+        button:hover { opacity: 0.8; }
+
+        #quitBtn{
+            background-color: gray;
+        }
+        
     </style>
 </head>
 <body>
-    <h1>🐍 Play Redjan's Snake Game 🕹️</h1>
-    <p id="score">Score: 0</p>
-    <p id="highScore">High Score: 0</p>
-    <p id="gameOverMsg">Game Over! Click Restart to play again.</p>
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
-    <br>
-    <button id="restartBtn" onclick="restartGame()">Restart Game</button>
-    <button id="pauseBtn" onclick="togglePause()">Pause</button>
-    <div class="controls">
-        <button onclick="changeDirection({key: 'ArrowUp'})">⬆️</button><br>
-        <button onclick="changeDirection({key: 'ArrowLeft'})">⬅️</button>
-        <button onclick="changeDirection({key: 'ArrowRight'})">➡️</button><br>
-        <button onclick="changeDirection({key: 'ArrowDown'})">⬇️</button>
+    <h1 class="title">🐍Redjan's Snake Game 🕹️</h1><br>
+    <div class="game-container">
+        <p class="info" id="score">Score: 0</p>
+        <p class="info" id="highScore">High Score: 0</p>
+        <canvas id="gameCanvas" width="400" height="400"></canvas>
+       
+        <br>
+        <hr>
+        <p class="info" id="gameOverMsg" style="display:none; color:red; font-size:18px; font-weight:bold;">Game Over!</p>
+        <hr>
+        <br>
+
+        <button id="restartBtn" onclick="restartGame()">Restart</button>
+        <button id="pauseBtn" onclick="togglePause()">Pause</button>
+        <button id="quitBtn" onclick="window.location.href='RPSV_CODES.html'">Quit</button>
     </div>
+
+
+
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
-        const scoreDisplay = document.getElementById("score");
-        const highScoreDisplay = document.getElementById("highScore");
-        const gameOverMsg = document.getElementById("gameOverMsg");
         let snake = [{ x: 200, y: 200 }];
         let direction = "RIGHT";
         let food = { x: Math.floor(Math.random() * 20) * 20, y: Math.floor(Math.random() * 20) * 20 };
-        let gameOver = false;
         let score = 0;
+        let highScore = localStorage.getItem("highScore") || 0;
         let speed = 200;
+        let gameOver = false;
         let isPaused = false;
         let gameLoop;
-        let highScore = localStorage.getItem("highScore") || 0;
-        highScoreDisplay.innerText = "High Score: " + highScore;
-
+        document.getElementById("highScore").innerText = "High Score: " + highScore;
+        
         function draw() {
-            if (gameOver) return;
             ctx.fillStyle = "black";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = "red";
@@ -123,7 +131,7 @@
             ctx.fillStyle = "lime";
             snake.forEach(segment => ctx.fillRect(segment.x, segment.y, 20, 20));
         }
-
+        
         function update() {
             if (gameOver || isPaused) return;
             let head = { ...snake[0] };
@@ -134,38 +142,34 @@
             
             if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height || snake.some(seg => seg.x === head.x && seg.y === head.y)) {
                 gameOver = true;
-                gameOverMsg.style.display = "block";
+                document.getElementById("gameOverMsg").style.display = "block";
                 if (score > highScore) {
                     highScore = score;
                     localStorage.setItem("highScore", highScore);
-                    highScoreDisplay.innerText = "High Score: " + highScore;
                 }
                 return;
             }
             
             snake.unshift(head);
             if (head.x === food.x && head.y === food.y) {
-                score += 1;
-                scoreDisplay.innerText = "Score: " + score;
+                score++;
+                document.getElementById("score").innerText = "Score: " + score;
                 food = { x: Math.floor(Math.random() * 20) * 20, y: Math.floor(Math.random() * 20) * 20 };
                 speed = Math.max(50, 200 - score * 5);
                 clearInterval(gameLoop);
-                gameLoop = setInterval(() => {
-                    update();
-                    draw();
-                }, speed);
+                gameLoop = setInterval(() => { update(); draw(); }, speed);
             } else {
                 snake.pop();
             }
         }
-
+        
         function changeDirection(event) {
             if (event.key === "ArrowUp" && direction !== "DOWN") direction = "UP";
             if (event.key === "ArrowDown" && direction !== "UP") direction = "DOWN";
             if (event.key === "ArrowLeft" && direction !== "RIGHT") direction = "LEFT";
             if (event.key === "ArrowRight" && direction !== "LEFT") direction = "RIGHT";
         }
-
+        
         function restartGame() {
             snake = [{ x: 200, y: 200 }];
             direction = "RIGHT";
@@ -174,30 +178,22 @@
             score = 0;
             speed = 200;
             isPaused = false;
-            scoreDisplay.innerText = "Score: " + score;
-            gameOverMsg.style.display = "none";
+            document.getElementById("score").innerText = "Score: " + score;
+            document.getElementById("gameOverMsg").style.display = "none";
             clearInterval(gameLoop);
-            gameLoop = setInterval(() => {
-                update();
-                draw();
-            }, speed);
+            gameLoop = setInterval(() => { update(); draw(); }, speed);
         }
-
+        
         function togglePause() {
             isPaused = !isPaused;
             document.getElementById("pauseBtn").innerText = isPaused ? "Resume" : "Pause";
         }
-
+        
         document.addEventListener("keydown", changeDirection);
-        gameLoop = setInterval(() => {
-            update();
-            draw();
-        }, speed);
+        gameLoop = setInterval(() => { update(); draw(); }, speed);
     </script>
 
 
-   <footer>
-    <p>&copy; 2025 Redjan Phil S. Visitacion | Owner of this landing page</p>
-   </footer>
+   
 </body>
 </html>
