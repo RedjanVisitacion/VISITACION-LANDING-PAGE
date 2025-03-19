@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="img/icon.png">
-    <title>RPSV_Snake_Game</title>
+    <title>Snake Game</title>
     <style>
         body {
             text-align: center;
@@ -15,19 +14,25 @@
         canvas {
             border: 2px solid white;
         }
-        #score {
+        #score, #highScore {
             font-size: 20px;
             margin: 10px;
         }
-        #restartBtn {
+        #restartBtn, #pauseBtn {
             padding: 10px 20px;
             font-size: 16px;
             margin-top: 10px;
             cursor: pointer;
-            background-color: lime;
             border: none;
-            color: black;
             font-weight: bold;
+        }
+        #restartBtn {
+            background-color: lime;
+            color: black;
+        }
+        #pauseBtn {
+            background-color: orange;
+            color: black;
         }
         #gameOverMsg {
             display: none;
@@ -35,19 +40,37 @@
             color: red;
             font-weight: bold;
         }
+        .controls {
+            margin-top: 10px;
+        }
+        .controls button {
+            padding: 10px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
-    <h1>🐍 Redjan's Snake Game 🕹️</h1>
+    <h1>🐍 Play Snake Game 🕹️</h1>
     <p id="score">Score: 0</p>
+    <p id="highScore">High Score: 0</p>
     <p id="gameOverMsg">Game Over! Click Restart to play again.</p>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
     <br>
     <button id="restartBtn" onclick="restartGame()">Restart Game</button>
+    <button id="pauseBtn" onclick="togglePause()">Pause</button>
+    <div class="controls">
+        <button onclick="changeDirection({key: 'ArrowUp'})">⬆️</button><br>
+        <button onclick="changeDirection({key: 'ArrowLeft'})">⬅️</button>
+        <button onclick="changeDirection({key: 'ArrowRight'})">➡️</button><br>
+        <button onclick="changeDirection({key: 'ArrowDown'})">⬇️</button>
+    </div>
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
         const scoreDisplay = document.getElementById("score");
+        const highScoreDisplay = document.getElementById("highScore");
         const gameOverMsg = document.getElementById("gameOverMsg");
         let snake = [{ x: 200, y: 200 }];
         let direction = "RIGHT";
@@ -55,6 +78,10 @@
         let gameOver = false;
         let score = 0;
         let speed = 200;
+        let isPaused = false;
+        let gameLoop;
+        let highScore = localStorage.getItem("highScore") || 0;
+        highScoreDisplay.innerText = "High Score: " + highScore;
 
         function draw() {
             if (gameOver) return;
@@ -67,7 +94,7 @@
         }
 
         function update() {
-            if (gameOver) return;
+            if (gameOver || isPaused) return;
             let head = { ...snake[0] };
             if (direction === "UP") head.y -= 20;
             if (direction === "DOWN") head.y += 20;
@@ -77,6 +104,11 @@
             if (head.x < 0 || head.x >= canvas.width || head.y < 0 || head.y >= canvas.height || snake.some(seg => seg.x === head.x && seg.y === head.y)) {
                 gameOver = true;
                 gameOverMsg.style.display = "block";
+                if (score > highScore) {
+                    highScore = score;
+                    localStorage.setItem("highScore", highScore);
+                    highScoreDisplay.innerText = "High Score: " + highScore;
+                }
                 return;
             }
             
@@ -110,6 +142,7 @@
             gameOver = false;
             score = 0;
             speed = 200;
+            isPaused = false;
             scoreDisplay.innerText = "Score: " + score;
             gameOverMsg.style.display = "none";
             clearInterval(gameLoop);
@@ -119,8 +152,13 @@
             }, speed);
         }
 
+        function togglePause() {
+            isPaused = !isPaused;
+            document.getElementById("pauseBtn").innerText = isPaused ? "Resume" : "Pause";
+        }
+
         document.addEventListener("keydown", changeDirection);
-        let gameLoop = setInterval(() => {
+        gameLoop = setInterval(() => {
             update();
             draw();
         }, speed);
