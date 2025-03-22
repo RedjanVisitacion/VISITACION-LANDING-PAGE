@@ -145,4 +145,32 @@ document.addEventListener("keydown", function (e) {
     }
 });
 
+let currentMedia = null; // Stores the currently playing media (audio/video)
+
+function handleMediaPlayback(mediaElement) {
+    // Pause any currently playing media before playing a new one
+    if (currentMedia && currentMedia !== mediaElement) {
+        currentMedia.pause();
+        if (currentMedia.tagName === "VIDEO") {
+            currentMedia.currentTime = 0; // Reset video to start
+        }
+    }
+    currentMedia = mediaElement; // Update current playing media
+}
+
+// Select all audio elements
+const audios = document.querySelectorAll("audio");
+audios.forEach(audio => {
+    audio.addEventListener("play", function () {
+        handleMediaPlayback(this);
+    });
+});
+
+// Select all video elements
+const videos = document.querySelectorAll("video");
+videos.forEach(video => {
+    video.addEventListener("play", function () {
+        handleMediaPlayback(this);
+    });
+});
 window.addEventListener("scroll", activeMenu);
