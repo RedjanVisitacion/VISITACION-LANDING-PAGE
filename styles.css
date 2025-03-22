@@ -614,17 +614,44 @@ h1,h2,h3,h4,h5,h6{
 
 
 
+/* Blog Section Styling */
+#Blog {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 50px 20px;
+    
+    /* Full-screen background image */
+    background-image: url('img/bgg.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;  /* Ensures the image covers the entire section */
+    background-position: center;  /* Centers the image */
+    background-attachment: fixed; /* Keeps the background static while scrolling */
+
+   
+    box-shadow: 0px 8px 20px rgba(200, 155, 60, 0.3);
+    transition: transform 0.3s ease-in-out;
+}
+
+#Blog:hover {
+    transform: scale(1.02);
+}
+
+
+
 /* Blog Description */
 .section-description {
     font-size: 1.3rem;
     line-height: 1.9;
     font-weight: 400;
-    color: #fff;
+    color: #2e2a1e;  /* Dark brown for readability */
     text-align: justify;
     max-width: 900px;
     margin: 0 auto;
     padding: 25px;
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.3);
     border-radius: 15px;
     box-shadow: 0px 6px 15px rgba(255, 255, 255, 0.25);
     backdrop-filter: blur(10px);
@@ -633,7 +660,7 @@ h1,h2,h3,h4,h5,h6{
 
 /* Hover effect for a glowing effect */
 .section-description:hover {
-    background: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.5);
     box-shadow: 0px 10px 25px rgba(255, 255, 255, 0.4);
 }
 
