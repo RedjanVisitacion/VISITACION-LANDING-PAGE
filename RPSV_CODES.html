@@ -194,91 +194,62 @@
 <section class="blog">
     <div class="container">
         <!-- Photos Section -->
-        <h2 class="section-title">Photos</h2>
-        <div class="blog-grid">
-            <div class="blog-card">
-                <img src="img/profile.jpg" alt="Blog Image 1">
-                <div class="blog-content">
-                    <h3>My Journey as a Programmer</h3>
-                    <p>Discover how I started coding and the challenges I faced along the way...</p>
-                    <a href="#" class="read-more">Read More</a>
-                </div>
-            </div>
+<h2 class="section-title">📸 Photo Gallery</h2>
+<div class="gallery-container">
+    <div class="gallery-item" onclick="openLightbox('img/photo1.jpg', 'image')">
+        <img src="img/photo1.jpg" alt="Photo 1">
+    </div>
+    <div class="gallery-item" onclick="openLightbox('img/photo2.jpg', 'image')">
+        <img src="img/photo2.jpg" alt="Photo 2">
+    </div>
+    <div class="gallery-item" onclick="openLightbox('img/photo3.jpg', 'image')">
+        <img src="img/photo3.jpg" alt="Photo 3">
+    </div>
+</div>
 
-            <div class="blog-card">
-                <img src="img/rpsv.jpg" alt="Blog Image 2">
-                <div class="blog-content">
-                    <h3>Tips for Beginner Editors</h3>
-                    <p>Master the basics of video editing with these simple yet effective tips...</p>
-                    <a href="#" class="read-more">Read More</a>
-                </div>
-            </div>
+<!-- Videos Section -->
+<h2 class="section-title">🎥 Video Gallery</h2>
+<div class="gallery-container">
+    <div class="gallery-item" onclick="openLightbox('videos/video1.mp4', 'video')">
+        <video src="videos/video1.mp4" muted></video>
+    </div>
+    <div class="gallery-item" onclick="openLightbox('videos/video2.mp4', 'video')">
+        <video src="videos/video2.mp4" muted></video>
+    </div>
+    <div class="gallery-item" onclick="openLightbox('videos/video3.mp4', 'video')">
+        <video src="videos/video3.mp4" muted></video>
+    </div>
+</div>
 
-            <div class="blog-card">
-                <img src="img/red.jpg" alt="Blog Image 3">
-                <div class="blog-content">
-                    <h3>Photography Hacks You Need to Know</h3>
-                    <p>Enhance your photography skills with these essential tips and tricks...</p>
-                    <a href="#" class="read-more">Read More</a>
-                </div>
-            </div>
-        </div>
+<!-- Audio Section -->
+<h2 class="section-title">🎵 Audio Gallery</h2>
+<div class="audio-container">
+    <div class="audio-item">
+        <p>🎶 Track 1</p>
+        <audio controls>
+            <source src="audio/audio1.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+    <div class="audio-item">
+        <p>🎶 Track 2</p>
+        <audio controls>
+            <source src="audio/audio2.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+    <div class="audio-item">
+        <p>🎶 Track 3</p>
+        <audio controls>
+            <source src="audio/audio3.mp3" type="audio/mpeg">
+        </audio>
+    </div>
+</div>
 
-        <!-- Videos Section -->
-        <h2 class="section-title">Videos</h2>
-        <div class="blog-grid">
-            <div class="blog-card media-card">
-                <video controls class="media">
-                    <source src="video/memories.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <div class="blog-content">
-                    <h3>My Journey as a Programmer</h3>
-                    <p>Watch my story and learn about my programming journey...</p>
-                    <a href="#" class="read-more">Watch More</a>
-                </div>
-            </div>
-
-            <div class="blog-card media-card">
-                <video controls class="media">
-                    <source src="video/Reels.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-                <div class="blog-content">
-                    <h3>Photography Hacks You Need to Know</h3>
-                    <p>Improve your skills with these essential photography tricks...</p>
-                    <a href="#" class="read-more">Watch More</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Audio Section -->
-        <h2 class="section-title">Audio</h2>
-        <div class="blog-grid">
-            <div class="blog-card media-card">
-                <audio controls class="media">
-                    <source src="audio/Praise.mp3" type="audio/mp3">
-                    Your browser does not support the audio element.
-                </audio>
-                <div class="blog-content">
-                    <h3>Praise</h3>
-                    <p>Listen to expert tips on getting started with video editing...</p>
-                    <a href="#" class="read-more">Listen More</a>
-                </div>
-            </div>
-
-            <div class="blog-card media-card">
-                <audio controls class="media">
-                    <source src="audio/GodsNotDead.mp3" type="audio/mp3">
-                    Your browser does not support the audio element.
-                </audio>
-                <div class="blog-content">
-                    <h3>God's Not Dead</h3>
-                    <p>Listen to expert tips on getting started with video editing...</p>
-                    <a href="#" class="read-more">Listen More</a>
-                </div>
-            </div>
-        </div>
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox">
+    <span class="close" onclick="closeLightbox()">&times;</span>
+    <img id="lightbox-img" class="lightbox-img">
+    <video id="lightbox-video" class="lightbox-video" controls></video>
+</div>
     </div>
 </section>
 

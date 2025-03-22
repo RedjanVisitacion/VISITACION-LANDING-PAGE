@@ -84,4 +84,65 @@ function activeMenu() {
     links[len].classList.add("active");
 }
 
+function openLightbox(src, type) {
+    const lightbox = document.getElementById("lightbox");
+    const img = document.getElementById("lightbox-img");
+    const video = document.getElementById("lightbox-video");
+
+    lightbox.style.display = "flex";
+
+    if (type === "image") {
+        img.src = src;
+        img.style.display = "block";
+        video.style.display = "none";
+    } else if (type === "video") {
+        video.src = src;
+        video.style.display = "block";
+        img.style.display = "none";
+    }
+}
+
+// Open Lightbox
+function openLightbox(src, type) {
+    const lightbox = document.getElementById("lightbox");
+    const img = document.getElementById("lightbox-img");
+    const video = document.getElementById("lightbox-video");
+
+    lightbox.style.display = "flex";
+
+    if (type === "image") {
+        img.src = src;
+        img.style.display = "block";
+        video.style.display = "none";
+    } else if (type === "video") {
+        video.src = src;
+        video.style.display = "block";
+        img.style.display = "none";
+    }
+}
+
+// Close Lightbox
+function closeLightbox() {
+    const lightbox = document.getElementById("lightbox");
+    const video = document.getElementById("lightbox-video");
+
+    lightbox.style.display = "none";
+    video.pause();
+    video.currentTime = 0;
+}
+
+// Close Lightbox on Click Outside
+document.getElementById("lightbox").addEventListener("click", function (e) {
+    if (e.target === this) {
+        closeLightbox();
+    }
+});
+
+// Close Lightbox with Escape Key
+document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") {
+        closeLightbox();
+    }
+});
+
 window.addEventListener("scroll", activeMenu);
