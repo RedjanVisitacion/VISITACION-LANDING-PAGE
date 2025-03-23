@@ -186,6 +186,39 @@
             <button class="like-button" onclick="sendLike()"><i class='bx bxs-like'></i></button>
         </div>
     </div>
-    <script src="script.js"></script>
+    <script src="RPSV-STATIC_AI.js"></script>
+
+    <script>
+        function sendMessage() {
+            let userInput = document.getElementById("user-input").value;
+            if (userInput.trim() === "") return;
+
+            let chatBox = document.getElementById("chat-box");
+
+            let userMessage = document.createElement("div");
+            userMessage.classList.add("message", "user-message");
+            userMessage.innerText = userInput;
+            chatBox.appendChild(userMessage);
+
+            document.getElementById("user-input").value = "";
+
+            setTimeout(() => {
+                let botMessage = document.createElement("div");
+                botMessage.classList.add("message", "bot-message");
+                botMessage.innerText = "Hello! How can I assist you?";
+                chatBox.appendChild(botMessage);
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 1000);
+        }
+
+        function sendLike() {
+            let chatBox = document.getElementById("chat-box");
+            let likeMessage = document.createElement("div");
+            likeMessage.classList.add("message", "user-message");
+            likeMessage.innerHTML = "👍";
+            chatBox.appendChild(likeMessage);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+    </script>
 </body>
 </html>
