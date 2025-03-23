@@ -80,6 +80,20 @@ h1,h2,h3,h4,h5,h6{
     color: var(--blue);
 }
 
+
+#cv-button {
+    position: fixed; /* Makes the button sticky */
+    bottom: 20px; /* Adjust this to place the button at the bottom */
+    right: 20px; /* Adjust this to place the button at the right */
+    padding: 10px 15px;
+    background: rgba(94, 64, 64, 0.356);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000; /* Ensures it stays on top */
+}
+
 /* start header */
 
 .header{
