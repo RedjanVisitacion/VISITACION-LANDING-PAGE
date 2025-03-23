@@ -1,27 +1,22 @@
 <?php
-// Get input values safely (with fallback for missing data)
-$name = isset($_POST['name']) ? $_POST['name'] : '';
-$email = isset($_POST['email']) ? $_POST['email'] : '';
-$message_text = isset($_POST['message']) ? $_POST['message'] : '';
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Get form data
+    $user_name = $_POST["name"];
+    $user_email = $_POST["email"];
+    $user_message = $_POST["message"];
 
-// Database Connection (PostgreSQL)
-$conn = pg_connect("host=localhost port=5432 dbname=your_dbname user=your_username password=your_password");
+    // Auto-reply message
+    $subject = "Thank You for Contacting Us!";
+    $reply_message = "Hi $user_name,\n\nThank you for reaching out. We received your message:\n\n\"$user_message\"\n\nWe will get back to you soon.\n\nBest regards,\nYour Team";
 
-// Check connection
-if (!$conn) {
-    die("Connection failed: " . pg_last_error());
+    // Email headers
+    $headers = "From: support@yourdomain.com"; // Change to your support email
+
+    // Send email to the user
+    mail($user_email, $subject, $reply_message, $headers);
+
+    // (Optional) Redirect after submission
+    header("Location: thank-you.html");
+    exit();
 }
-
-// Insert Query (Use placeholders for security)
-$query = "INSERT INTO message (email, name, message_text) VALUES ($1, $2, $3)";
-$result = pg_query_params($conn, $query, array($email, $name, $message_text));
-
-if ($result) {
-    echo "Submitted Successfully...";
-} else {
-    echo "Error: " . pg_last_error($conn);
-}
-
-// Close connection
-pg_close($conn);
 ?>
