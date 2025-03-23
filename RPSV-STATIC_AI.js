@@ -46,3 +46,24 @@ document.addEventListener("DOMContentLoaded", function() {
     window.sendMessage = sendMessage;
     window.sendLike = sendLike;
 });
+
+function openChat() {
+    document.getElementById("cv-button").style.transform = "scale(0)";
+    setTimeout(() => {
+        document.getElementById("chat-container").classList.add("open");
+    }, 200);
+}
+
+function closeChat() {
+    document.getElementById("chat-container").classList.remove("open");
+    setTimeout(() => {
+        document.getElementById("cv-button").style.transform = "scale(1)";
+    }, 400);
+}
+
+// Close chat when user scrolls
+window.addEventListener("scroll", function () {
+    if (document.getElementById("chat-container").classList.contains("open")) {
+        closeChat();
+    }
+});

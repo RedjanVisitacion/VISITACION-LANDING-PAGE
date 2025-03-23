@@ -6,6 +6,7 @@
         color: white;
     }
 </style>
+
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -72,9 +73,22 @@
                     <button class="cv-button">Play</button>
                 </a>
 
-                <a href="RPSV_AI.html">
+                <a href="javascript:void(0);" onclick="openChat()">
                     <button id="cv-button" class="cv-button">AI</button>
                 </a>
+                
+                <div id="chat-container" class="chat-container">
+                    <div class="chat-header">
+                        <button onclick="closeChat()" class="close-btn">&times;</button>
+                        <span>RPSV-STATIC_AI</span>
+                    </div>
+                    <div class="chat-box" id="chat-box"></div>
+                    <div class="input-container">
+                        <input type="text" id="user-input" placeholder="Type a message...">
+                        <button onclick="sendMessage()"><i class='bx bx-send'></i></button>
+                        <button class="like-button" onclick="sendLike()"><i class='bx bxs-like'></i></button>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -440,12 +454,29 @@
     
 
 
+   <script>
+    function openChat() {
+        document.getElementById("cv-button").style.transform = "scale(0)";
+        setTimeout(() => {
+            document.getElementById("chat-container").classList.add("open");
+        }, 200);
+    }
+
+    function closeChat() {
+        document.getElementById("chat-container").classList.remove("open");
+        setTimeout(() => {
+            document.getElementById("cv-button").style.transform = "scale(1)";
+        }, 400);
+    }
+</script>
 
 
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
 
     <!-- link file JS -->
+
+    <script src="RPSV-STATIC_AI.js"></script>
     <script src="main.js"></script>
 </body>
 </html>
