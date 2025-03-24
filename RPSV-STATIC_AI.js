@@ -31,19 +31,31 @@ document.addEventListener("DOMContentLoaded", function() {
       chatBox.scrollTop = chatBox.scrollHeight;
     }
   
-    function respo(userMessage){
-        if(userMessage === "hi"){
-            return "hello";
-        }else if(userMessage === "Redjan"){
-            return "Hello Redjan my creator";
-        }else if(userMessage === "I love you"){ 
-            return "Sorry I don't love you";
-        }else if(userMessage === "Bye!"){
-            return "Bye redjan thanks for creating me";
-        }else{
-            return getRandomResponse();
-        }
-    }
+
+    function respo(userMessage) {
+      userMessage = userMessage.toLowerCase().replace(/\s+/g, "");
+  
+      if (userMessage === "hi") {
+          return "Hello! How can I assist you today?";
+      } else if (userMessage === "redjan") {
+          return "Hello Redjan, my creator! How's your day going?";
+      } else if (userMessage === "iloveyou") {
+          return "Sorry, I don't have feelings, but I appreciate you!";
+      } else if (userMessage === "bye!") {
+          return "Goodbye, Redjan! Thanks for creating me. See you soon!";
+      } else if (userMessage === "whoisredjan?") {
+          return "Redjan Phil S. Visitacion is a skilled photographer, designer, and programmer. A passionate student with a talent for video editing!";
+      } else if (userMessage === "whatareredjansskills?") {
+          return "Redjan is skilled in photography, design, programming, and video editing. A true creative mind!";
+      } else if (userMessage === "wheredoesredjanstudy?") {
+          return "Redjan studies at the University of Science and Technology of Southern Philippines.";
+      } else if (userMessage === "whatcertificatesdoesredjanhave?") {
+          return "Redjan holds DICT, TESDA, and Microsoft certificates, proving expertise in various tech fields.";
+      } else {
+          return getRandomResponse(); 
+      }
+  }
+  
 
 
 
