@@ -11,14 +11,14 @@ document.addEventListener("DOMContentLoaded", function() {
       let chatBox = document.getElementById("chat-box");
       let userMessage = document.createElement("div");
       userMessage.classList.add("message", "user-message");
-      userMessage.innerText = userInput;
+      userMessage.innerText = respo();
       chatBox.appendChild(userMessage);
       document.getElementById("user-input").value = "";
 
       setTimeout(() => {
           let botMessage = document.createElement("div");
           botMessage.classList.add("message", "bot-message");
-          botMessage.innerText = playGame(userChoice);
+          botMessage.innerText = respo(userMessage);
           chatBox.appendChild(botMessage);
           chatBox.scrollTop = chatBox.scrollHeight;
       }, 1000);
@@ -35,6 +35,15 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   // Function to handle bot responses
+
+function respo(){
+    if(userMessage === "Play"){
+         return playGames(userChoice);
+    }
+}
+
+
+  
 function respo(userMessage) {
     userMessage = userMessage.toLowerCase().trim();
 
