@@ -18,7 +18,7 @@ document.addEventListener("DOMContentLoaded", function() {
       setTimeout(() => {
           let botMessage = document.createElement("div");
           botMessage.classList.add("message", "bot-message");
-          botMessage.innerText = respo(userInput);
+          botMessage.innerText = playGame(userChoice);
           chatBox.appendChild(botMessage);
           chatBox.scrollTop = chatBox.scrollHeight;
       }, 1000);
