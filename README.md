@@ -1,4 +1,4 @@
-<img src="Rpsv_Code.jpg" alt="GitHub Banner" width="100%" />
+<img src="/img/bg.jpg" alt="GitHub Banner" width="100%" />
 
 <p align="center">
     <a href="https://github.com/RedjanVisitacion">
@@ -21,7 +21,7 @@
 ![](https://github-profile-trophy.vercel.app/?username=RedjanVisitacion&theme=radical&no-frame=false&no-bg=true&margin-w=4)
 
 
-<img src="bgLog.png" alt="GitHub Banner" width="100%" />
+<img src="/img/bgLog.png" alt="GitHub Banner" width="100%" />
 
 
 
