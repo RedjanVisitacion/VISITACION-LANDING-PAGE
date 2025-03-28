@@ -124,7 +124,7 @@ h1,h2,h3,h4,h5,h6{
 .home{
     height: 130vh;
     width: 100%;
-    background: url(VISITACION-LANDING-PAGE/img/bg.jpg);
+    background: url(/VISITACION-LANDING-PAGE/img/bg.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
