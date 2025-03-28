@@ -1,4 +1,4 @@
-<img src="/img/bg.jpg" alt="GitHub Banner" width="100%" />
+<img src="/img/sign.png" alt="GitHub Banner" width="100%" />
 
 <p align="center">
     <a href="https://github.com/RedjanVisitacion">
