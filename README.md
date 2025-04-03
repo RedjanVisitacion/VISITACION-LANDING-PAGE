@@ -39,14 +39,6 @@
 
 
 
-<!-- BLOG-POST-LIST:END -->
-
-<div align="center">
-  <hr>
-  <h3 id="heres-a-joke-for-you">😜Here’s a Joke for you:</h3>
-  <img src="https://readme-jokes.vercel.app/api" alt="Jokes Card">
-  <hr>
-</div>
 
 <p align="center"> 
   </p><div align="center">Visitor count</div><br>
