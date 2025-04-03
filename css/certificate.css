@@ -24,7 +24,7 @@ body {
 
 /* Certificate Styling */
 .certificate {
-  background: url('/img/bg.jpg') no-repeat center center;
+  background: url('/VISITACION-LANDING-PAGE/img/bg.jpg') no-repeat center center;
   background-size: cover;
   width: 70%;
   max-width: 900px;
