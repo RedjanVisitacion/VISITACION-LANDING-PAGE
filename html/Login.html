@@ -79,14 +79,19 @@
       const form = document.getElementById("registerForm");
       const formData = new FormData(form);
       fetch("../php/register.php", { method: "POST", body: formData })
-        .then(r => r.json())
-        .then(res => {
+        .then(async r => {
+          const txt = await r.text();
+          let res;
+          try { res = JSON.parse(txt); } catch (e) {
+            alert(`Server error (${r.status}). ${txt.substring(0,200)}`);
+            return;
+          }
           alert(res.message || (res.success ? "Registration successful!" : "Registration failed."));
           if (res.success) {
             toggleForms();
           }
         })
-        .catch(() => alert("Network error. Please try again."));
+        .catch(e => alert(`Network error: ${e.message || e}`));
     }
 
     function login(event) {
@@ -94,15 +99,24 @@
       const form = document.getElementById("loginForm");
       const formData = new FormData(form);
       fetch("../php/login.php", { method: "POST", body: formData })
-        .then(r => r.json())
-        .then(res => {
+        .then(async r => {
+          const txt = await r.text();
+          let res;
+          try { res = JSON.parse(txt); } catch (e) {
+            alert(`Server error (${r.status}). ${txt.substring(0,200)}`);
+            return;
+          }
           if (res.success) {
-            window.location.href = "../index.html";
+            if (res.role === 'admin') {
+              window.location.href = "../php/admin.php";
+            } else {
+              window.location.href = "../php/user.php";
+            }
           } else {
             alert(res.message || "Invalid username or password.");
           }
         })
-        .catch(() => alert("Network error. Please try again."));
+        .catch(e => alert(`Network error: ${e.message || e}`));
     }
   </script>
 </body>
