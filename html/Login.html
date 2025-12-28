@@ -78,7 +78,7 @@
       }
       const form = document.getElementById("registerForm");
       const formData = new FormData(form);
-      fetch("../php/register.php", { method: "POST", body: formData })
+      fetch(`../php/register.php?t=${Date.now()}`, { method: "POST", body: formData })
         .then(async r => {
           const txt = await r.text();
           let res;
@@ -86,7 +86,8 @@
             alert(`Server error (${r.status}). ${txt.substring(0,200)}`);
             return;
           }
-          alert(res.message || (res.success ? "Registration successful!" : "Registration failed."));
+          const msg = res.message || (res.success ? "Registration successful!" : "Registration failed.");
+          alert(res.hint ? `${msg} Details: ${res.hint}` : msg);
           if (res.success) {
             toggleForms();
           }
@@ -98,7 +99,7 @@
       event.preventDefault();
       const form = document.getElementById("loginForm");
       const formData = new FormData(form);
-      fetch("../php/login.php", { method: "POST", body: formData })
+      fetch(`../php/login.php?t=${Date.now()}`, { method: "POST", body: formData })
         .then(async r => {
           const txt = await r.text();
           let res;
@@ -113,7 +114,8 @@
               window.location.href = "../php/user.php";
             }
           } else {
-            alert(res.message || "Invalid username or password.");
+            const msg = res.message || "Invalid username or password.";
+            alert(res.hint ? `${msg} Details: ${res.hint}` : msg);
           }
         })
         .catch(e => alert(`Network error: ${e.message || e}`));

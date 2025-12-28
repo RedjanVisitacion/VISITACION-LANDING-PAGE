@@ -1,6 +1,14 @@
 <?php
 ini_set('display_errors', '0');
-error_reporting(0);
+error_reporting(E_ALL);
+register_shutdown_function(function(){
+    $e = error_get_last();
+    if ($e && (!headers_sent())) {
+        http_response_code(500);
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'message' => 'Server fatal error', 'hint' => $e['message']]);
+    }
+});
 header('Content-Type: application/json');
 header('Cache-Control: no-store');
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -21,11 +29,22 @@ $conn->query("CREATE TABLE IF NOT EXISTS users (
 $admin_username = 'rpsv_codes';
 $admin_password_hash = password_hash('RedjanPhil09', PASSWORD_DEFAULT);
 $admin_email = 'admin@example.com';
-$seed = $conn->prepare('INSERT INTO users (username, email, password_hash, role) SELECT ?, ?, ?, ? WHERE NOT EXISTS (SELECT 1 FROM users WHERE username = ? LIMIT 1)');
 $admin_role = 'admin';
-$seed->bind_param('sssss', $admin_username, $admin_email, $admin_password_hash, $admin_role, $admin_username);
-$seed->execute();
-$seed->close();
+$chk = $conn->prepare('SELECT id FROM users WHERE username = ? LIMIT 1');
+if ($chk) {
+    $chk->bind_param('s', $admin_username);
+    $chk->execute();
+    $chk->store_result();
+    if ($chk->num_rows === 0) {
+        $ins = $conn->prepare('INSERT INTO users (username, email, password_hash, role) VALUES (?, ?, ?, ?)');
+        if ($ins) {
+            $ins->bind_param('ssss', $admin_username, $admin_email, $admin_password_hash, $admin_role);
+            $ins->execute();
+            $ins->close();
+        }
+    }
+    $chk->close();
+}
 $username = trim($_POST['username'] ?? '');
 $password = $_POST['password'] ?? '';
 if ($username === '' || $password === '') {
@@ -33,6 +52,11 @@ if ($username === '' || $password === '') {
     exit;
 }
 $stmt = $conn->prepare('SELECT id, username, password_hash, role FROM users WHERE username = ? LIMIT 1');
+if (!$stmt) {
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'Database error (prepare).', 'hint' => $conn->error]);
+    exit;
+}
 $stmt->bind_param('s', $username);
 $stmt->execute();
 $stmt->store_result();

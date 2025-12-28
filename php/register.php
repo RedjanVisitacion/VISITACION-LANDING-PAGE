@@ -1,5 +1,16 @@
 <?php
+ini_set('display_errors', '0');
+error_reporting(E_ALL);
+register_shutdown_function(function(){
+    $e = error_get_last();
+    if ($e && (!headers_sent())) {
+        http_response_code(500);
+        header('Content-Type: application/json');
+        echo json_encode(['success' => false, 'message' => 'Server fatal error', 'hint' => $e['message']]);
+    }
+});
 header('Content-Type: application/json');
+header('Cache-Control: no-store');
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode(['success' => false, 'message' => 'Invalid request.']);
     exit;
@@ -31,8 +42,19 @@ if ($password !== $confirm) {
     exit;
 }
 $check = $conn->prepare('SELECT id FROM users WHERE username = ? OR email = ? LIMIT 1');
+if (!$check) {
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'Database error (prepare check).', 'hint' => $conn->error]);
+    exit;
+}
 $check->bind_param('ss', $username, $email);
-$check->execute();
+if (!$check->execute()) {
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'Database error (execute check).', 'hint' => $check->error]);
+    $check->close();
+    $conn->close();
+    exit;
+}
 $check->store_result();
 if ($check->num_rows > 0) {
     echo json_encode(['success' => false, 'message' => 'Username or email already exists.']);
@@ -44,12 +66,18 @@ $check->close();
 $hash = password_hash($password, PASSWORD_DEFAULT);
 $role = 'user';
 $stmt = $conn->prepare('INSERT INTO users (username, email, password_hash, role) VALUES (?, ?, ?, ?)');
+if (!$stmt) {
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'Database error (prepare insert).', 'hint' => $conn->error]);
+    exit;
+}
 $stmt->bind_param('ssss', $username, $email, $hash, $role);
 $ok = $stmt->execute();
 if ($ok) {
     echo json_encode(['success' => true, 'message' => 'Registration successful.']);
 } else {
-    echo json_encode(['success' => false, 'message' => 'Registration failed.']);
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'Registration failed.', 'hint' => $stmt->error]);
 }
 $stmt->close();
 $conn->close();
