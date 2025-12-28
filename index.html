@@ -5,6 +5,9 @@
     .dot{
         color: white;
     }
+    /* Hash-route overlay for Login */
+    #route-login-overlay { position: fixed; inset: 0; z-index: 9999; display: none; background: #000; }
+    #route-login-overlay iframe { width: 100%; height: 100%; border: 0; display: block; }
 </style>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -37,7 +40,7 @@
                     <a href="#Contacts">Contacts</a>
                     
 
-                    <a href="html/Login.html" class="btn" target="rpsv_login" onclick="window.open('html/Login.html','rpsv_login'); return false;">Login</a>
+                    <a href="#login" class="btn" target="rpsv_login" onclick="window.open('#login','rpsv_login'); return false;">Login</a>
                 </div>    
                 
             </nav>
@@ -444,10 +447,36 @@
 
 
 
+    <!-- Hash-route: login overlay -->
+    <div id="route-login-overlay">
+        <iframe id="route-login-frame" src="about:blank" title="Login"></iframe>
+    </div>
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
 
     <!-- link file JS -->
     <script src="/VISITACION-LANDING-PAGE/function/main.js"></script>
+    <script>
+      (function(){
+        function updateRoute(){
+          var hash = location.hash;
+          var overlay = document.getElementById('route-login-overlay');
+          var frame = document.getElementById('route-login-frame');
+          if(!overlay || !frame) return;
+          var isLogin = (hash === '#login' || hash === '#/login');
+          if(isLogin){
+            overlay.style.display = 'block';
+            if(!frame.dataset.loaded){
+              frame.src = 'html/Login.html';
+              frame.dataset.loaded = '1';
+            }
+          } else {
+            overlay.style.display = 'none';
+          }
+        }
+        window.addEventListener('hashchange', updateRoute);
+        window.addEventListener('load', updateRoute);
+      })();
+    </script>
 </body>
 </html>
