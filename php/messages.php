@@ -62,18 +62,7 @@ $role = htmlspecialchars($_SESSION['role'] ?? 'user', ENT_QUOTES, 'UTF-8');
       </div>
 
       <section class="grid messages-grid">
-        <div class="card">
-          <h2 class="card-title">Compose Message</h2>
-          <form id="msgForm">
-            <div style="display:flex;flex-direction:column;gap:10px;">
-              <textarea id="msgText" name="content" rows="4" maxlength="2000" placeholder="Type your message..." style="width:100%;padding:12px;border:1px solid #eee;border-radius:8px;resize:vertical" required></textarea>
-              <div style="display:flex;justify-content:flex-end;gap:10px;align-items:center;">
-                <button type="submit" class="db-btn db-btn-small">Send</button>
-              </div>
-            </div>
-          </form>
-          <div id="msgStatus" style="margin-top:10px;color:var(--p-color);"></div>
-        </div>
+        
 
         <?php if ($role === 'admin'): ?>
         <div class="card" id="adminChats">
@@ -84,13 +73,18 @@ $role = htmlspecialchars($_SESSION['role'] ?? 'user', ENT_QUOTES, 'UTF-8');
         </div>
         <?php endif; ?>
 
-        <div class="card calendar-card">
+        <div class="card calendar-card" style="display:flex;flex-direction:column;height:calc(100vh - 220px);min-height:420px;">
           <div class="calendar-header">
             <div class="cal-title" id="convTitle">Conversation</div>
           </div>
-          <div class="calendar" id="msgList" style="padding:0; max-height: calc(100vh - 260px); overflow-y:auto;">
+          <div class="calendar" id="msgList" style="padding:12px; flex:1 1 auto; overflow-y:auto;">
             <div style="padding:12px;color:#666;">Loading...</div>
           </div>
+          <form id="msgForm" style="border-top:1px solid #eee;padding:10px 12px;display:flex;gap:10px;align-items:flex-end;">
+            <textarea id="msgText" name="content" rows="2" maxlength="2000" placeholder="Type your message..." style="flex:1;padding:12px;border:1px solid #eee;border-radius:8px;resize:none" required></textarea>
+            <button type="submit" class="db-btn db-btn-small">Send</button>
+          </form>
+          <div id="msgStatus" style="padding:0 12px 12px;color:var(--p-color);"></div>
         </div>
       </section>
     </main>
