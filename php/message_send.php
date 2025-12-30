@@ -78,18 +78,49 @@ $to = isset($_POST['to']) ? (int)$_POST['to'] : 0;
 if ($content === '') { echo json_encode(['success' => false, 'message' => 'Message cannot be empty.']); $conn->close(); exit; }
 if (mb_strlen($content) > 2000) { $content = mb_substr($content, 0, 2000); }
 
-// If non-admin, default recipient is admin
+// Ensure contacts table exists for user-to-user chats
+@$conn->query("CREATE TABLE IF NOT EXISTS contacts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  a_id INT NOT NULL,
+  b_id INT NOT NULL,
+  requested_by INT NOT NULL,
+  status ENUM('pending','accepted') NOT NULL DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uniq_pair (a_id,b_id),
+  INDEX idx_req (requested_by),
+  INDEX idx_a (a_id),
+  INDEX idx_b (b_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
+
+// If non-admin, default recipient is admin; otherwise require accepted contact
+$aid = 0; $rsAid = $conn->query("SELECT id FROM users WHERE role='admin' LIMIT 1");
+if ($rsAid && $rowAid = $rsAid->fetch_assoc()) { $aid = (int)$rowAid['id']; }
+if ($rsAid) { $rsAid->close(); }
+
 if ($to === 0) {
     if ($myRole !== 'admin') {
-        $aid = 0; $rs = $conn->query("SELECT id FROM users WHERE role='admin' LIMIT 1");
-        if ($rs && $row = $rs->fetch_assoc()) { $aid = (int)$row['id']; }
-        if ($rs) { $rs->close(); }
         if ($aid === 0) { echo json_encode(['success' => false, 'message' => 'Admin account not found.']); $conn->close(); exit; }
         $to = $aid;
     } else {
         echo json_encode(['success' => false, 'message' => 'Recipient is required.']);
         $conn->close();
         exit;
+    }
+} else if ($myRole !== 'admin' && $to !== $aid) {
+    // Only allow sending to accepted contacts
+    $a = min($me, $to); $b = max($me, $to);
+    $q = $conn->prepare("SELECT 1 FROM contacts WHERE a_id=? AND b_id=? AND status='accepted' LIMIT 1");
+    if ($q) {
+        $q->bind_param('ii', $a, $b);
+        if ($q->execute()) {
+            $res = $q->get_result();
+            if (!$res || $res->num_rows === 0) { echo json_encode(['success'=>false,'message'=>'You can only message accepted contacts.']); $q->close(); $conn->close(); exit; }
+        } else {
+            http_response_code(500);
+            echo json_encode(['success'=>false,'message'=>'Database error (check contact).','hint'=>$q->error]);
+            $q->close(); $conn->close(); exit;
+        }
+        $q->close();
     }
 }
 

@@ -70,6 +70,19 @@ $me = (int)($_SESSION['user_id'] ?? 0);
 $myRole = $_SESSION['role'] ?? 'user';
 $with = isset($_GET['with']) ? (int)$_GET['with'] : 0;
 
+// Ensure contacts table exists for user-to-user chats
+@$conn->query("CREATE TABLE IF NOT EXISTS contacts (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  a_id INT NOT NULL,
+  b_id INT NOT NULL,
+  requested_by INT NOT NULL,
+  status ENUM('pending','accepted') NOT NULL DEFAULT 'pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE KEY uniq_pair (a_id,b_id),
+  INDEX idx_req (requested_by),
+  INDEX idx_a (a_id),
+  INDEX idx_b (b_id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
 // Fallback API: return chat users for admin when list_users=1
 if (isset($_GET['list_users']) && $myRole === 'admin') {
     // Prefer users table if present
@@ -136,14 +149,36 @@ if (isset($_GET['list_users']) && $myRole === 'admin') {
 
 // Determine partner
 if ($myRole !== 'admin') {
-    // For users, default partner is admin
+    // For users: allow chatting with accepted contacts or admin (default)
     $rs = $conn->query("SELECT id, username FROM users WHERE role='admin' LIMIT 1");
     $adminId = 0; $adminName = 'Admin';
     if ($rs && $row = $rs->fetch_assoc()) { $adminId = (int)$row['id']; $adminName = $row['username']; }
     if ($rs) { $rs->close(); }
     if ($adminId === 0) { echo json_encode(['success' => false, 'message' => 'Admin account not found.']); $conn->close(); exit; }
-    $with = $adminId;
-    $withName = $adminName;
+
+    $useId = $adminId; $useName = $adminName;
+    if ($with > 0) {
+        if ($with === $adminId) {
+            $useId = $adminId; $useName = $adminName;
+        } else {
+            $a = min($me, $with); $b = max($me, $with);
+            $qry = $conn->prepare("SELECT status FROM contacts WHERE a_id=? AND b_id=? AND status='accepted' LIMIT 1");
+            if ($qry) {
+                $qry->bind_param('ii', $a, $b);
+                if ($qry->execute()) {
+                    $res2 = $qry->get_result();
+                    if ($res2 && $res2->num_rows > 0) {
+                        $useId = $with;
+                        $rr = $conn->query("SELECT username FROM users WHERE id = ".$useId." LIMIT 1");
+                        if ($rr && $rrow = $rr->fetch_assoc()) { $useName = $rrow['username']; }
+                        if ($rr) { $rr->close(); }
+                    }
+                }
+                $qry->close();
+            }
+        }
+    }
+    $with = $useId; $withName = $useName;
 } else {
     // Admin: if no partner specified, pick most recent conversation partner
     if ($with === 0) {
