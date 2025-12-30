@@ -22,9 +22,9 @@ $role = htmlspecialchars($_SESSION['role'] ?? 'user', ENT_QUOTES, 'UTF-8');
         <img src="../img/logo.png" alt="logo" class="brand-logo" />
       </div>
       <nav class="menu">
-        <a class="item active"><i class='bx bxs-dashboard'></i> <span>Dashboard</span></a>
-        <a class="item"><i class='bx bxs-conversation'></i> <span>Messages</span></a>
-        <a class="item"><i class='bx bxs-cog'></i> <span>Settings</span></a>
+        <a class="item active" href="user.php"><i class='bx bxs-dashboard'></i> <span>Dashboard</span></a>
+        <a class="item" href="messages.php"><i class='bx bxs-conversation'></i> <span>Messages</span></a>
+        <a class="item" href="#settings"><i class='bx bxs-cog'></i> <span>Settings</span></a>
         <?php if ($role === 'admin'): ?>
           <a class="item" href="admin.php"><i class='bx bxs-shield'></i> <span>Admin</span></a>
         <?php endif; ?>
