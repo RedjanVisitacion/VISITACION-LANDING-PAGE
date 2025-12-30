@@ -98,6 +98,7 @@ $role = htmlspecialchars($_SESSION['role'] ?? 'user', ENT_QUOTES, 'UTF-8');
 
   <script>
     var MY_ROLE = <?php echo json_encode($role); ?>;
+    var API_BASE = <?php echo json_encode(rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? '/php/messages.php'), '/\\').'/'); ?>;
     function getWithFromQuery(){
       var s = new URLSearchParams(window.location.search);
       var w = parseInt(s.get('with')||'0',10); return isNaN(w)?0:w;
@@ -126,7 +127,7 @@ $role = htmlspecialchars($_SESSION['role'] ?? 'user', ENT_QUOTES, 'UTF-8');
       isLoadingMessages = true;
       try {
         const qs = CURRENT_WITH? ('?with='+CURRENT_WITH) : '';
-        const res = await fetch('message_list.php'+qs, { credentials: 'same-origin' });
+        const res = await fetch(API_BASE + 'message_list.php'+qs, { credentials: 'same-origin' });
         const data = await res.json();
         const list = document.getElementById('msgList');
         if(!data.success){ list.innerHTML = '<div style="padding:12px;color:#c00;">'+(data.message||'Failed to load')+'</div>'; return; }
@@ -186,7 +187,7 @@ $role = htmlspecialchars($_SESSION['role'] ?? 'user', ENT_QUOTES, 'UTF-8');
       body.set('content', val);
       if (MY_ROLE === 'admin' && CURRENT_WITH) { body.set('to', String(CURRENT_WITH)); }
       try{
-        const res = await fetch('message_send.php', {
+        const res = await fetch(API_BASE + 'message_send.php', {
           method: 'POST',
           headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
           body: body.toString(),
@@ -208,21 +209,59 @@ $role = htmlspecialchars($_SESSION['role'] ?? 'user', ENT_QUOTES, 'UTF-8');
       }
     });
 
+    async function fetchFirstOk(urls, opts){
+      for (let i=0;i<urls.length;i++){
+        try{
+          const r = await fetch(urls[i], opts);
+          if (r && r.ok) return r;
+        }catch(_){ }
+      }
+      return null;
+    }
+
     async function loadChatUsers(){
       if (MY_ROLE !== 'admin') return;
       var wrap = document.getElementById('chatList');
       if (!wrap) return;
       try{
-        const res = await fetch('chat_users.php', { credentials: 'same-origin' });
-        const data = await res.json();
+        var ts = Date.now();
+        var opts = { credentials: 'same-origin', cache: 'no-store' };
+        var listCandidates = [
+          API_BASE + 'message_list.php?list_users=1&ts='+ts,
+          '/php/message_list.php?list_users=1&ts='+ts,
+          '/message_list.php?list_users=1&ts='+ts,
+          'message_list.php?list_users=1&ts='+ts,
+          'php/message_list.php?list_users=1&ts='+ts
+        ];
+        let res = await fetchFirstOk(listCandidates, opts);
+        if (!res){
+          var userCandidates = [
+            API_BASE + 'chat_users.php?ts='+ts,
+            '/php/chat_users.php?ts='+ts,
+            '/chat_users.php?ts='+ts,
+            'chat_users.php?ts='+ts,
+            'php/chat_users.php?ts='+ts
+          ];
+          res = await fetchFirstOk(userCandidates, opts);
+        }
+        if (!res) { wrap.innerHTML = '<div style="padding:12px;color:#c00;">HTTP 404 Error</div>'; return; }
+        let raw = await res.text();
+        let data = null;
+        try { data = JSON.parse(raw); } catch(parseErr) {
+          wrap.innerHTML = '<div style="padding:12px;color:#c00;">Invalid server response.</div>';
+          return;
+        }
         if(!data.success){ wrap.innerHTML = '<div style="padding:12px;color:#c00;">'+(data.message||'Failed to load users')+'</div>'; return; }
         var users = data.users||[];
         if(!users.length){ wrap.innerHTML = '<div style="padding:12px;color:#666;">No users yet.</div>'; return; }
         wrap.innerHTML = users.map(function(u){
           var active = (u.id === CURRENT_WITH);
+          var uname = (u.username||'');
+          var unameEsc = uname.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+          var av = (u.avatar||uname.charAt(0).toUpperCase()||'?').replace(/&/g,'&amp;').replace(/</g,'&lt;');
           return '<div class="chat-item" data-id="'+u.id+'" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;cursor:pointer;'+(active?'background:#f5f7ff;':'')+'">'
-               +   '<div style="width:34px;height:34px;border-radius:50%;background:#e7e7e7;display:flex;align-items:center;justify-content:center;font-weight:600;color:#444">'+ (u.avatar||u.username.charAt(0).toUpperCase()) +'</div>'
-               +   '<div style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+u.username+'</div>'
+               +   '<div style="width:34px;height:34px;border-radius:50%;background:#e7e7e7;display:flex;align-items:center;justify-content:center;font-weight:600;color:#444">'+ av +'</div>'
+               +   '<div style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+ unameEsc +'</div>'
                + '</div>';
         }).join('');
         Array.prototype.forEach.call(wrap.querySelectorAll('.chat-item'), function(el){

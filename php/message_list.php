@@ -70,6 +70,70 @@ $me = (int)($_SESSION['user_id'] ?? 0);
 $myRole = $_SESSION['role'] ?? 'user';
 $with = isset($_GET['with']) ? (int)$_GET['with'] : 0;
 
+// Fallback API: return chat users for admin when list_users=1
+if (isset($_GET['list_users']) && $myRole === 'admin') {
+    // Prefer users table if present
+    $hasUsersTbl = false;
+    if ($rsx = $conn->query("SHOW TABLES LIKE 'users'")) { $hasUsersTbl = ($rsx->num_rows > 0); $rsx->close(); }
+    if ($hasUsersTbl) {
+        $sql = "SELECT u.id, u.username, COALESCE(MAX(m.id),0) AS last_id
+                FROM users u
+                LEFT JOIN messages m ON ((m.sender_id = u.id AND m.receiver_id = ?) OR (m.sender_id = ? AND m.receiver_id = u.id))
+                WHERE u.id <> ? AND (u.role = 'user' OR u.role IS NULL)
+                GROUP BY u.id, u.username
+                ORDER BY last_id DESC, u.username ASC
+                LIMIT 200";
+        $st = $conn->prepare($sql);
+        if (!$st) { http_response_code(500); echo json_encode(['success'=>false,'message'=>'Database error (prepare).','hint'=>$conn->error]); $conn->close(); exit; }
+        $st->bind_param('iii', $me, $me, $me);
+        if (!$st->execute()) { http_response_code(500); echo json_encode(['success'=>false,'message'=>'Database error (execute).','hint'=>$st->error]); $st->close(); $conn->close(); exit; }
+        $rs = $st->get_result();
+        $users = [];
+        while ($row = $rs->fetch_assoc()) {
+            $uname = (string)($row['username'] ?? 'User');
+            $users[] = [
+                'id' => (int)$row['id'],
+                'username' => $uname,
+                'avatar' => strtoupper(substr($uname, 0, 1)),
+            ];
+        }
+        $st->close();
+        $conn->close();
+        echo json_encode(['success'=>true, 'users'=>$users]);
+        exit;
+    } else {
+        // Fallback: infer partners from messages table only
+        $sql2 = "SELECT t.other_id AS id, MAX(t.id) AS last_id
+                 FROM (
+                   SELECT id, CASE WHEN sender_id = ? THEN receiver_id ELSE sender_id END AS other_id
+                   FROM messages
+                   WHERE sender_id = ? OR receiver_id = ?
+                 ) t
+                 WHERE t.other_id <> ?
+                 GROUP BY t.other_id
+                 ORDER BY last_id DESC
+                 LIMIT 200";
+        $st2 = $conn->prepare($sql2);
+        if (!$st2) { http_response_code(500); echo json_encode(['success'=>false,'message'=>'Database error (prepare-fallback).','hint'=>$conn->error]); $conn->close(); exit; }
+        $st2->bind_param('iiii', $me, $me, $me, $me);
+        if (!$st2->execute()) { http_response_code(500); echo json_encode(['success'=>false,'message'=>'Database error (execute-fallback).','hint'=>$st2->error]); $st2->close(); $conn->close(); exit; }
+        $rs2 = $st2->get_result();
+        $users = [];
+        while ($row = $rs2->fetch_assoc()) {
+            $id = (int)$row['id'];
+            $users[] = [
+                'id' => $id,
+                'username' => 'User #'.$id,
+                'avatar' => strtoupper(substr((string)$id, 0, 1)),
+            ];
+        }
+        $st2->close();
+        $conn->close();
+        echo json_encode(['success'=>true, 'users'=>$users]);
+        exit;
+    }
+}
+
 // Determine partner
 if ($myRole !== 'admin') {
     // For users, default partner is admin
