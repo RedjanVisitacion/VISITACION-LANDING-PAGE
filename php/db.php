@@ -1,4 +1,6 @@
 <?php
+// Use Philippine time across PHP runtime
+@date_default_timezone_set('Asia/Manila');
 $DB_HOST = 'sql100.infinityfree.com';
 $DB_USER = 'if0_40772113';
 $DB_PASS = 'PWevVotDArm8U7h';
@@ -71,4 +73,6 @@ if (!$conn || $conn->connect_error) {
     exit;
 }
 $conn->set_charset('utf8mb4');
+// Ensure MySQL session timezone is also Asia/Manila for CURRENT_TIMESTAMP and selects
+@ $conn->query("SET time_zone = '+08:00'");
 ?>

@@ -11,6 +11,23 @@ register_shutdown_function(function(){
 });
 header('Content-Type: application/json');
 header('Cache-Control: no-store');
+// Ensure consistent and persistent session cookies across the app
+$secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+$domain = $_SERVER['HTTP_HOST'] ?? '';
+@session_name('RPSVSESSID');
+if (PHP_VERSION_ID >= 70300) {
+    session_set_cookie_params([
+        'lifetime' => 86400 * 7,
+        'path' => '/',
+        'domain' => $domain,
+        'secure' => $secure,
+        'httponly' => true,
+        'samesite' => 'Lax'
+    ]);
+} else {
+    session_set_cookie_params(86400 * 7, '/; samesite=Lax', $domain, $secure, true);
+}
+if (session_status() === PHP_SESSION_NONE) { session_start(); }
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     echo json_encode(['success' => false, 'message' => 'Invalid request.']);
     exit;
@@ -67,6 +84,7 @@ if ($userFound && password_verify($password, $hash)) {
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
+    session_regenerate_id(true);
     $_SESSION['user_id'] = $id;
     $_SESSION['username'] = $f_username;
     $_SESSION['role'] = $role;

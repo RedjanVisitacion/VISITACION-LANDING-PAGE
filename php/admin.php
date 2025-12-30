@@ -1,4 +1,19 @@
 <?php
+$secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+$domain = $_SERVER['HTTP_HOST'] ?? '';
+@session_name('RPSVSESSID');
+if (PHP_VERSION_ID >= 70300) {
+  session_set_cookie_params([
+    'lifetime' => 86400 * 7,
+    'path' => '/',
+    'domain' => $domain,
+    'secure' => $secure,
+    'httponly' => true,
+    'samesite' => 'Lax'
+  ]);
+} else {
+  session_set_cookie_params(86400 * 7, '/; samesite=Lax', $domain, $secure, true);
+}
 session_start();
 if (!isset($_SESSION['user_id'])) { header('Location: ../html/Login.html'); exit; }
 $username = htmlspecialchars($_SESSION['username'] ?? '', ENT_QUOTES, 'UTF-8');

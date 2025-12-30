@@ -1,4 +1,19 @@
 <?php
+$secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+$domain = $_SERVER['HTTP_HOST'] ?? '';
+@session_name('RPSVSESSID');
+if (PHP_VERSION_ID >= 70300) {
+  session_set_cookie_params([
+    'lifetime' => 86400 * 7,
+    'path' => '/',
+    'domain' => $domain,
+    'secure' => $secure,
+    'httponly' => true,
+    'samesite' => 'Lax'
+  ]);
+} else {
+  session_set_cookie_params(86400 * 7, '/; samesite=Lax', $domain, $secure, true);
+}
 session_start();
 if (!isset($_SESSION['user_id'])) { header('Location: ../html/Login.html'); exit; }
 $username = htmlspecialchars($_SESSION['username'] ?? '', ENT_QUOTES, 'UTF-8');
@@ -46,8 +61,8 @@ $role = htmlspecialchars($_SESSION['role'] ?? 'user', ENT_QUOTES, 'UTF-8');
         </div>
       </div>
 
-      <section class="grid">
-        <div class="card" style="grid-column: 1 / 2;">
+      <section class="grid messages-grid">
+        <div class="card">
           <h2 class="card-title">Compose Message</h2>
           <form id="msgForm">
             <div style="display:flex;flex-direction:column;gap:10px;">
@@ -60,11 +75,20 @@ $role = htmlspecialchars($_SESSION['role'] ?? 'user', ENT_QUOTES, 'UTF-8');
           <div id="msgStatus" style="margin-top:10px;color:var(--p-color);"></div>
         </div>
 
-        <div class="card calendar-card" style="grid-column: 2 / 3;">
-          <div class="calendar-header">
-            <div class="cal-title">Your Messages</div>
+        <?php if ($role === 'admin'): ?>
+        <div class="card" id="adminChats">
+          <h2 class="card-title">Chats</h2>
+          <div id="chatList" style="padding:8px 0; max-height:50vh; overflow-y:auto;">
+            <div style="padding:12px;color:#666;">Loading...</div>
           </div>
-          <div class="calendar" id="msgList" style="padding:0;">
+        </div>
+        <?php endif; ?>
+
+        <div class="card calendar-card">
+          <div class="calendar-header">
+            <div class="cal-title" id="convTitle">Conversation</div>
+          </div>
+          <div class="calendar" id="msgList" style="padding:0; max-height: calc(100vh - 260px); overflow-y:auto;">
             <div style="padding:12px;color:#666;">Loading...</div>
           </div>
         </div>
@@ -73,6 +97,17 @@ $role = htmlspecialchars($_SESSION['role'] ?? 'user', ENT_QUOTES, 'UTF-8');
   </div>
 
   <script>
+    var MY_ROLE = <?php echo json_encode($role); ?>;
+    function getWithFromQuery(){
+      var s = new URLSearchParams(window.location.search);
+      var w = parseInt(s.get('with')||'0',10); return isNaN(w)?0:w;
+    }
+    var CURRENT_WITH = getWithFromQuery();
+    var CURRENT_ME = 0;
+    var POLL_MS = 2000;
+    var pollTimer = null;
+    var lastRenderedId = 0;
+    var isLoadingMessages = false;
     (function(){
       var btn = document.getElementById('userMenuBtn');
       var menu = document.getElementById('userMenu');
@@ -86,25 +121,58 @@ $role = htmlspecialchars($_SESSION['role'] ?? 'user', ENT_QUOTES, 'UTF-8');
       }
     })();
 
-    async function loadMessages(){
+    async function loadMessages(force){
+      if (isLoadingMessages) { return; }
+      isLoadingMessages = true;
       try {
-        const res = await fetch('message_list.php', { credentials: 'same-origin' });
+        const qs = CURRENT_WITH? ('?with='+CURRENT_WITH) : '';
+        const res = await fetch('message_list.php'+qs, { credentials: 'same-origin' });
         const data = await res.json();
         const list = document.getElementById('msgList');
         if(!data.success){ list.innerHTML = '<div style="padding:12px;color:#c00;">'+(data.message||'Failed to load')+'</div>'; return; }
-        if(!data.items || !data.items.length){ list.innerHTML = '<div style="padding:12px;color:#666;">No messages yet.</div>'; return; }
-        list.innerHTML = data.items.map(function(m){
-          var d = new Date(m.created_at.replace(' ','T'));
-          var when = d.toLocaleString();
+        CURRENT_ME = data.me_id || 0;
+        CURRENT_WITH = data.with_id || CURRENT_WITH || 0;
+        var title = document.getElementById('convTitle');
+        if (data.with_username) { title.textContent = 'Conversation with '+data.with_username; }
+        var items = (data.items || []);
+        var newLastId = items.length ? items[items.length - 1].id : 0;
+        if (!force && lastRenderedId === newLastId) { return; }
+        if(!items.length){ list.innerHTML = '<div style="padding:12px;color:#666;">No messages yet.</div>'; lastRenderedId = 0; return; }
+        var nearBottom = (list.scrollHeight - list.scrollTop - list.clientHeight) < 100;
+        list.innerHTML = items.map(function(m){
+          var mine = (m.sender_id === CURRENT_ME);
+          var src = m.created_at_iso || (m.created_at ? (m.created_at.replace(' ','T')+"+08:00") : null);
+          var d = src ? new Date(src) : new Date();
+          var when = d.toLocaleString('en-PH', { timeZone: 'Asia/Manila' });
           var txt = (m.content||'').replace(/&/g,'&amp;').replace(/</g,'&lt;');
-          return '<div class="activity-item" style="border-bottom:1px solid #eee;padding:12px 16px;display:flex;gap:12px;align-items:flex-start">'
-              + '<div class="activity-icon" style="background:#f3f3f3;color:var(--blue)"><i class="bx bxs-message"></i></div>'
-              + '<div><div class="announcement-title" style="margin:0 0 4px 0">'+when+'</div><div class="announcement-content">'+txt+'</div></div>'
+          var align = mine ? 'flex-end' : 'flex-start';
+          var bg = mine ? 'var(--blue)' : '#f3f3f3';
+          var color = mine ? '#fff' : '#222';
+          return '<div style="display:flex;justify-content:'+align+';padding:8px 12px">'
+              + '<div style="max-width:70%;background:'+bg+';color:'+color+';padding:10px 12px;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,.06);white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;">'
+              + '<div style="font-size:12px;opacity:.8;margin-bottom:4px;color:'+ (mine?'#eef':'#666') +'">'+when+'</div>'
+              + '<div>'+txt+'</div>'
+              + '</div>'
               + '</div>';
         }).join('');
+        if (force || nearBottom) { list.scrollTop = list.scrollHeight; }
+        lastRenderedId = newLastId;
+        if (MY_ROLE === 'admin') { try { loadChatUsers(); } catch(e){} }
       } catch(err){
         document.getElementById('msgList').innerHTML = '<div style="padding:12px;color:#c00;">Network error.</div>';
+      } finally {
+        isLoadingMessages = false;
       }
+    }
+
+    function startPolling(){
+      if (pollTimer) return;
+      pollTimer = setInterval(function(){ loadMessages(false); }, POLL_MS);
+    }
+    function stopPolling(){
+      if (!pollTimer) return;
+      clearInterval(pollTimer);
+      pollTimer = null;
     }
 
     document.getElementById('msgForm').addEventListener('submit', async function(e){
@@ -116,6 +184,7 @@ $role = htmlspecialchars($_SESSION['role'] ?? 'user', ENT_QUOTES, 'UTF-8');
       status.textContent = 'Sending...';
       const body = new URLSearchParams();
       body.set('content', val);
+      if (MY_ROLE === 'admin' && CURRENT_WITH) { body.set('to', String(CURRENT_WITH)); }
       try{
         const res = await fetch('message_send.php', {
           method: 'POST',
@@ -128,7 +197,7 @@ $role = htmlspecialchars($_SESSION['role'] ?? 'user', ENT_QUOTES, 'UTF-8');
           status.style.color = 'green';
           status.textContent = 'Message sent.';
           txt.value='';
-          loadMessages();
+          loadMessages(true);
         } else {
           status.style.color = '#c00';
           status.textContent = data.message || 'Failed to send.';
@@ -139,7 +208,44 @@ $role = htmlspecialchars($_SESSION['role'] ?? 'user', ENT_QUOTES, 'UTF-8');
       }
     });
 
-    loadMessages();
+    async function loadChatUsers(){
+      if (MY_ROLE !== 'admin') return;
+      var wrap = document.getElementById('chatList');
+      if (!wrap) return;
+      try{
+        const res = await fetch('chat_users.php', { credentials: 'same-origin' });
+        const data = await res.json();
+        if(!data.success){ wrap.innerHTML = '<div style="padding:12px;color:#c00;">'+(data.message||'Failed to load users')+'</div>'; return; }
+        var users = data.users||[];
+        if(!users.length){ wrap.innerHTML = '<div style="padding:12px;color:#666;">No users yet.</div>'; return; }
+        wrap.innerHTML = users.map(function(u){
+          var active = (u.id === CURRENT_WITH);
+          return '<div class="chat-item" data-id="'+u.id+'" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:8px;cursor:pointer;'+(active?'background:#f5f7ff;':'')+'">'
+               +   '<div style="width:34px;height:34px;border-radius:50%;background:#e7e7e7;display:flex;align-items:center;justify-content:center;font-weight:600;color:#444">'+ (u.avatar||u.username.charAt(0).toUpperCase()) +'</div>'
+               +   '<div style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+u.username+'</div>'
+               + '</div>';
+        }).join('');
+        Array.prototype.forEach.call(wrap.querySelectorAll('.chat-item'), function(el){
+          el.addEventListener('click', function(){
+            var id = parseInt(el.getAttribute('data-id'),10);
+            if (!isFinite(id) || id<=0) return;
+            CURRENT_WITH = id;
+            lastRenderedId = 0;
+            var url = new URL(window.location.href);
+            url.searchParams.set('with', String(id));
+            window.history.replaceState({}, '', url.toString());
+            loadMessages(true);
+            loadChatUsers();
+          });
+        });
+      }catch(err){
+        wrap.innerHTML = '<div style="padding:12px;color:#c00;">Network error.</div>';
+      }
+    }
+
+    loadMessages(true);
+    startPolling();
+    if (MY_ROLE === 'admin') { loadChatUsers(); }
   </script>
 </body>
 </html>
