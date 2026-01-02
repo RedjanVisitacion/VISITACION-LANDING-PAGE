@@ -120,6 +120,26 @@
         })
         .catch(e => alert(`Network error: ${e.message || e}`));
     }
+
+    (function(){
+      var el = document.getElementById('body');
+      if(!el) return;
+      var urls = ['../php/site_config.php?action=get&keys=login_bg,home_bg','/php/site_config.php?action=get&keys=login_bg,home_bg','/VISITACION-LANDING-PAGE/php/site_config.php?action=get&keys=login_bg,home_bg'];
+      (async function(){
+        var res = null;
+        for (var i=0;i<urls.length;i++){
+          try{ var r = await fetch(urls[i], { credentials: 'same-origin', cache: 'no-store' }); if(r.ok){ res = r; break; } }catch(e){}
+        }
+        try{
+          var data = res ? await res.json() : null;
+          var bg = data && (data.login_bg || data['login_bg'] || data.home_bg || data['home_bg']);
+          if (bg && typeof bg === 'string' && bg.indexOf('http') === 0){
+            // Remove colored overlay: use only the image as background
+            el.style.background = 'url("'+bg+'") center center / cover no-repeat fixed';
+          }
+        }catch(e){}
+      })();
+    })();
   </script>
 </body>
 </html>

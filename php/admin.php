@@ -123,6 +123,18 @@ $conn->close();
             </table>
           </div>
         </div>
+
+        <div class="card" id="galleryCard" style="grid-column: 1 / -1;">
+          <h2 class="card-title">Manage Gallery</h2>
+          <div id="galleryStatus" style="margin-bottom:8px;color:var(--p-color);"></div>
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+            <button class="db-btn db-btn-small db-btn-outline" id="galleryUploadBtn"><i class='bx bxs-cloud-upload'></i> <span>Upload</span></button>
+            <input type="file" id="galleryFileInput" accept="image/*" multiple style="display:none;">
+          </div>
+          <div id="galleryGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;">
+            <!-- images here -->
+          </div>
+        </div>
       </section>
     </main>
   </div>
@@ -272,6 +284,132 @@ $conn->close();
       });
 
       loadUsers();
+    })();
+
+    // Admin: Manage Gallery
+    (function(){
+      var grid = document.getElementById('galleryGrid');
+      var status = document.getElementById('galleryStatus');
+      var btn = document.getElementById('galleryUploadBtn');
+      var fileInput = document.getElementById('galleryFileInput');
+      if (!grid || !btn || !fileInput) return;
+      var API_BASE = <?php echo json_encode(rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? '/php/admin.php'), '/\\').'/'); ?>;
+
+      function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\"/g,'&quot;'); }
+      function setStatus(msg, color){ if(status){ status.style.color = color||'var(--p-color)'; status.textContent = msg||''; } }
+
+      function render(items){
+        if (!items || !items.length){ grid.innerHTML = '<div style="grid-column:1/-1;color:#666;text-align:center;padding:16px;">No photos yet.</div>'; return; }
+        grid.innerHTML = items.map(function(it){
+          var url = esc(it.url||'');
+          var id = it.id;
+          var hidden = parseInt(it.is_hidden||0, 10) ? 1 : 0;
+          var imgStyle = 'width:100%;height:140px;object-fit:cover;display:block;' + (hidden ? 'filter:grayscale(100%);opacity:.5;' : '');
+          var badge = hidden ? '<div style="position:absolute;bottom:6px;left:6px;background:#333;color:#fff;font-size:11px;padding:3px 6px;border-radius:6px;opacity:.85;">Hidden</div>' : '';
+          return '<div style="position:relative;border-radius:10px;overflow:hidden;border:1px solid #eee;">'
+            + '<img src="'+url+'" alt="Photo" style="'+imgStyle+'">'
+            + '<div style="position:absolute;top:6px;left:6px;display:flex;gap:6px;flex-wrap:wrap;">'
+              + '<button class="db-btn db-btn-small db-btn-outline" data-home="'+id+'" data-url="'+url+'">Home BG</button>'
+              + '<button class="db-btn db-btn-small db-btn-outline" data-login="'+id+'" data-url="'+url+'">Login BG</button>'
+              + '<button class="db-btn db-btn-small '+(hidden?'db-btn-success':'db-btn-warning')+'" data-hide="'+id+'" data-hidden="'+hidden+'">'+(hidden?'Show':'Hide')+'</button>'
+            + '</div>'
+            + '<button class="db-btn db-btn-small db-btn-danger" data-del="'+id+'" style="position:absolute;top:6px;right:6px;">Delete</button>'
+            + badge
+          + '</div>';
+        }).join('');
+      }
+
+      async function loadGallery(){
+        setStatus('Loading gallery...');
+        try{
+          var res = await fetch(API_BASE + 'gallery_api.php?action=list&include_hidden=1&t=' + Date.now(), { credentials: 'same-origin', cache: 'no-store' });
+          var data = await res.json();
+          render((data && data.images) || []);
+          setStatus('');
+        }catch(e){ setStatus('Failed to load gallery','\#c00'); }
+      }
+
+      async function deleteImage(id){
+        if (!confirm('Delete this image?')) return;
+        setStatus('Deleting...');
+        try{
+          var res = await fetch(API_BASE + 'gallery_api.php?action=delete', { method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:'id='+encodeURIComponent(id) });
+          var data = await res.json();
+          if (!data.success){ setStatus(data.message||'Delete failed','\#c00'); return; }
+          setStatus('Deleted.','green');
+          loadGallery();
+        }catch(e){ setStatus('Network error','\#c00'); }
+      }
+
+      async function uploadFiles(files){
+        if (!files || !files.length) return;
+        setStatus('Uploading...');
+        for (var i=0;i<files.length;i++){
+          var fd = new FormData();
+          fd.append('file', files[i]);
+          try{
+            var res = await fetch(API_BASE + 'gallery_api.php?action=upload', { method:'POST', credentials:'same-origin', body: fd });
+            var data = await res.json();
+            if (!data.success){ setStatus(data.message||'Upload failed','\#c00'); return; }
+          }catch(e){ setStatus('Network error','\#c00'); return; }
+        }
+        setStatus('Uploaded.','green');
+        fileInput.value = '';
+        loadGallery();
+      }
+
+      async function setSiteBg(key, url){
+        setStatus('Saving background...');
+        try{
+          var res = await fetch(API_BASE + 'site_config.php?action=set', { method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:'key='+encodeURIComponent(key)+'&value='+encodeURIComponent(url) });
+          var data = await res.json();
+          if (!data.success){ setStatus(data.message||'Save failed','\#c00'); return; }
+          setStatus('Saved.','green');
+        }catch(err){ setStatus('Network error','\#c00'); }
+      }
+
+      async function setHidden(id, hidden){
+        setStatus('Updating...');
+        try{
+          var res = await fetch(API_BASE + 'gallery_api.php?action=set_hidden', { method:'POST', credentials:'same-origin', headers:{'Content-Type':'application/x-www-form-urlencoded'}, body:'id='+encodeURIComponent(id)+'&hidden='+encodeURIComponent(hidden) });
+          var data = await res.json();
+          if (!data.success){ setStatus(data.message||'Update failed','\#c00'); return; }
+          setStatus('Updated.','green');
+          loadGallery();
+        }catch(err){ setStatus('Network error','\#c00'); }
+      }
+
+      grid.addEventListener('click', function(e){
+        var t = e.target;
+        if (t && t.matches('[data-del]')){
+          var id = parseInt(t.getAttribute('data-del'),10);
+          if (isFinite(id) && id>0) deleteImage(id);
+          return;
+        }
+        if (t && t.matches('[data-home]')){
+          var url = t.getAttribute('data-url')||'';
+          if (url) setSiteBg('home_bg', url);
+          return;
+        }
+        if (t && t.matches('[data-login]')){
+          var url2 = t.getAttribute('data-url')||'';
+          if (url2) setSiteBg('login_bg', url2);
+          return;
+        }
+        if (t && t.matches('[data-hide]')){
+          var id2 = parseInt(t.getAttribute('data-hide'),10);
+          var cur = parseInt(t.getAttribute('data-hidden')||'0',10) ? 1 : 0;
+          var next = cur ? 0 : 1;
+          var ok = confirm(next ? 'Hide this image from the homepage gallery?' : 'Show this image in the homepage gallery?');
+          if (!ok) return;
+          setHidden(id2, next);
+          return;
+        }
+      });
+      btn.addEventListener('click', function(){ fileInput.click(); });
+      fileInput.addEventListener('change', function(){ uploadFiles(this.files); });
+
+      loadGallery();
     })();
   </script>
 </body>

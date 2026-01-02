@@ -131,6 +131,14 @@ h1,h2,h3,h4,h5,h6{
     position: relative;
     padding-top: 300px;
 }
+.home .text{ position: relative; z-index: 1; }
+.hero-slides{ position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+.hero-slides .slide{ position: absolute; inset: 0; background-size: cover; background-position: center; opacity: 0; transition: opacity 1.2s ease-in-out; }
+.hero-slides .slide.active{ opacity: 1; }
+.typed-roles{ color: #e4e4e4; opacity: .9; font-size: 22px; line-height: 1.6; margin: 0 0 4px; min-height: 28px; white-space: nowrap; }
+.cursor{ display: inline-block; margin-left: 4px; animation: blink 1s steps(2,start) infinite; }
+@keyframes blink{ 50%{ opacity: 0; } }
+.home .text ul{ display: none; }
 .home::after{
     content: '';
     position: absolute;
@@ -177,7 +185,8 @@ h1,h2,h3,h4,h5,h6{
     font-weight: 600;
     margin-bottom: 10px;
 }
-.home .text p span{
+.home .text p.typed-roles{ margin-top: 0; margin-bottom: 18px; }
+.home .text p .sep{
     display: inline-block;
     height: 1px;
     width: 70px;
@@ -190,7 +199,7 @@ h1,h2,h3,h4,h5,h6{
 .home .text h1{
     font-size: 70px;
     color: #fff;
-    margin-bottom: 35px;
+    margin-bottom: 4px;
     font-weight: 800;
 }
 .home .text ul{
@@ -713,6 +722,7 @@ h1,h2,h3,h4,h5,h6{
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
     background: rgba(255, 255, 255, 0.1);
     backdrop-filter: blur(10px);
+    height: 220px;
 }
 
 .gallery-item img, .gallery-item video {
@@ -728,6 +738,9 @@ h1,h2,h3,h4,h5,h6{
     transform: scale(1.08);
     box-shadow: 0px 10px 20px rgba(255, 72, 0, 0.4);
 }
+
+.reveal{ opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+.reveal.show{ opacity: 1; transform: translateY(0); }
 
 /* Audio Section */
 .audio-container {
