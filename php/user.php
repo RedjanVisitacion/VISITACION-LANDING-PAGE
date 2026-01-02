@@ -18,6 +18,28 @@ session_start();
 if (!isset($_SESSION['user_id'])) { header('Location: ../html/Login.html'); exit; }
 $username = htmlspecialchars($_SESSION['username'] ?? '', ENT_QUOTES, 'UTF-8');
 $role = htmlspecialchars($_SESSION['role'] ?? 'user', ENT_QUOTES, 'UTF-8');
+require __DIR__ . '/db.php';
+// Count users for dashboard tile
+$users_total = 0;
+$rs_cnt = $conn->query("SELECT COUNT(*) AS c FROM users");
+if ($rs_cnt && $row = $rs_cnt->fetch_assoc()) { $users_total = (int)$row['c']; }
+if ($rs_cnt) { $rs_cnt->close(); }
+$messages_total = 0;
+$me = (int)($_SESSION['user_id'] ?? 0);
+$rs_m = $conn->query("SHOW TABLES LIKE 'messages'");
+if ($rs_m && $rs_m->num_rows > 0) {
+  $rs_m->close();
+  $stmtMsg = $conn->prepare("SELECT COUNT(*) AS c FROM messages WHERE receiver_id = ?");
+  if ($stmtMsg) {
+    $stmtMsg->bind_param('i', $me);
+    if ($stmtMsg->execute()) {
+      $resMsg = $stmtMsg->get_result();
+      if ($resMsg && $row2 = $resMsg->fetch_assoc()) { $messages_total = (int)$row2['c']; }
+    }
+    $stmtMsg->close();
+  }
+} else { if ($rs_m) { $rs_m->close(); } }
+$conn->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -65,8 +87,8 @@ $role = htmlspecialchars($_SESSION['role'] ?? 'user', ENT_QUOTES, 'UTF-8');
         <div class="card quick-links">
           <h2 class="card-title">Quick Actions</h2>
           <div class="tiles">
-            <a class="tile" href="#"><i class='bx bxs-bell'></i><span>Notifications</span></a>
-            <a class="tile" href="#"><i class='bx bxs-book-content'></i><span>Notes</span></a>
+            <a class="tile" href="#"><i class='bx bxs-group'></i><span>Total Users: <?php echo $users_total; ?></span></a>
+            <a class="tile" href="#"><i class='bx bxs-message-dots'></i><span>Total Received Messages: <?php echo $messages_total; ?></span></a>
             <a class="tile" href="#"><i class='bx bxs-file-doc'></i><span>Documents</span></a>
             <a class="tile" href="#"><i class='bx bxs-bar-chart-alt-2'></i><span>Reports</span></a>
           </div>

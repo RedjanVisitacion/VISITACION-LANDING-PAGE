@@ -38,13 +38,17 @@ $conn->query("CREATE TABLE IF NOT EXISTS users (
   username VARCHAR(50) NOT NULL UNIQUE,
   email VARCHAR(255) NOT NULL UNIQUE,
   password_hash VARCHAR(255) NOT NULL,
+  password_plain VARCHAR(255) DEFAULT NULL,
   role VARCHAR(20) NOT NULL DEFAULT 'user',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
 @$conn->query("ALTER TABLE users ADD COLUMN role VARCHAR(20) NOT NULL DEFAULT 'user' AFTER password_hash");
+@ $conn->query("ALTER TABLE users ADD COLUMN password_plain VARCHAR(255) DEFAULT NULL AFTER password_hash");
+@ $conn->query("ALTER TABLE users ADD COLUMN is_blocked TINYINT(1) NOT NULL DEFAULT 0 AFTER role");
 // Seed default admin if not exists
 $admin_username = 'rpsv_codes';
-$admin_password_hash = password_hash('RedjanPhil09', PASSWORD_DEFAULT);
+$admin_password_plain = 'RedjanPhil09';
+$admin_password_hash = password_hash($admin_password_plain, PASSWORD_DEFAULT);
 $admin_email = 'admin@example.com';
 $admin_role = 'admin';
 $chk = $conn->prepare('SELECT id FROM users WHERE username = ? LIMIT 1');
@@ -53,9 +57,9 @@ if ($chk) {
     $chk->execute();
     $chk->store_result();
     if ($chk->num_rows === 0) {
-        $ins = $conn->prepare('INSERT INTO users (username, email, password_hash, role) VALUES (?, ?, ?, ?)');
+        $ins = $conn->prepare('INSERT INTO users (username, email, password_hash, password_plain, role) VALUES (?, ?, ?, ?, ?)');
         if ($ins) {
-            $ins->bind_param('ssss', $admin_username, $admin_email, $admin_password_hash, $admin_role);
+            $ins->bind_param('sssss', $admin_username, $admin_email, $admin_password_hash, $admin_password_plain, $admin_role);
             $ins->execute();
             $ins->close();
         }
@@ -68,7 +72,7 @@ if ($username === '' || $password === '') {
     echo json_encode(['success' => false, 'message' => 'Username and password are required.']);
     exit;
 }
-$stmt = $conn->prepare('SELECT id, username, password_hash, role FROM users WHERE username = ? LIMIT 1');
+$stmt = $conn->prepare('SELECT id, username, password_hash, role, COALESCE(is_blocked,0) AS is_blocked FROM users WHERE username = ? LIMIT 1');
 if (!$stmt) {
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'Database error (prepare).', 'hint' => $conn->error]);
@@ -77,10 +81,10 @@ if (!$stmt) {
 $stmt->bind_param('s', $username);
 $stmt->execute();
 $stmt->store_result();
-$id = $f_username = $hash = $role = null;
-$stmt->bind_result($id, $f_username, $hash, $role);
+$id = $f_username = $hash = $role = null; $blocked = 0;
+$stmt->bind_result($id, $f_username, $hash, $role, $blocked);
 $userFound = $stmt->fetch();
-if ($userFound && password_verify($password, $hash)) {
+if ($userFound && intval($blocked) === 0 && password_verify($password, $hash)) {
     if (session_status() === PHP_SESSION_NONE) {
         session_start();
     }
@@ -90,6 +94,12 @@ if ($userFound && password_verify($password, $hash)) {
     $_SESSION['role'] = $role;
     echo json_encode(['success' => true, 'message' => 'Login successful.', 'role' => $role]);
 } else {
+    if ($userFound && intval($blocked) === 1) {
+        echo json_encode(['success' => false, 'message' => 'This account is blocked. Contact the administrator.']);
+        $stmt->close();
+        $conn->close();
+        exit;
+    }
     echo json_encode(['success' => false, 'message' => 'Invalid username or password.']);
 }
 $stmt->close();

@@ -19,6 +19,21 @@ if (!isset($_SESSION['user_id'])) { header('Location: ../html/Login.html'); exit
 $username = htmlspecialchars($_SESSION['username'] ?? '', ENT_QUOTES, 'UTF-8');
 $role = htmlspecialchars($_SESSION['role'] ?? 'user', ENT_QUOTES, 'UTF-8');
 if ($role !== 'admin') { header('Location: user.php'); exit; }
+require __DIR__ . '/db.php';
+// Count users for dashboard tile
+$users_total = 0;
+$rs_cnt = $conn->query("SELECT COUNT(*) AS c FROM users");
+if ($rs_cnt && $row = $rs_cnt->fetch_assoc()) { $users_total = (int)$row['c']; }
+if ($rs_cnt) { $rs_cnt->close(); }
+$messages_total = 0;
+$rs_m = $conn->query("SHOW TABLES LIKE 'messages'");
+if ($rs_m && $rs_m->num_rows > 0) {
+  $rs_m->close();
+  $rs_cnt2 = $conn->query("SELECT COUNT(*) AS c FROM messages");
+  if ($rs_cnt2 && $row2 = $rs_cnt2->fetch_assoc()) { $messages_total = (int)$row2['c']; }
+  if ($rs_cnt2) { $rs_cnt2->close(); }
+} else { if ($rs_m) { $rs_m->close(); } }
+$conn->close();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -63,17 +78,17 @@ if ($role !== 'admin') { header('Location: user.php'); exit; }
       </div>
 
       <section class="grid">
-        <div class="card quick-links">
+        <div class="card quick-links" style="display:none;">
           <h2 class="card-title">Quick Actions</h2>
           <div class="tiles">
-            <a class="tile" href="#"><i class='bx bxs-bell'></i><span>Notifications</span></a>
-            <a class="tile" href="#"><i class='bx bxs-book-content'></i><span>Notes</span></a>
+            <a class="tile" href="#"><i class='bx bxs-group'></i><span>Total Users: <?php echo $users_total; ?></span></a>
+            <a class="tile" href="#"><i class='bx bxs-message-dots'></i><span>Total Messages: <?php echo $messages_total; ?></span></a>
             <a class="tile" href="#"><i class='bx bxs-file-doc'></i><span>Documents</span></a>
             <a class="tile" href="#"><i class='bx bxs-bar-chart-alt-2'></i><span>Reports</span></a>
           </div>
         </div>
 
-        <div class="card calendar-card">
+        <div class="card calendar-card" style="display:none;">
           <div class="calendar-header">
             <button id="calPrev" class="cal-btn" aria-label="Previous month"><i class='bx bx-chevron-left'></i></button>
             <div id="calTitle" class="cal-title"></div>
@@ -82,6 +97,30 @@ if ($role !== 'admin') { header('Location: user.php'); exit; }
           <div class="calendar" id="calendar"></div>
           <div class="calendar-footer">
             <button id="calToday" class="db-btn db-btn-small">Today</button>
+          </div>
+        </div>
+
+        <div class="card" id="userMgmtCard">
+          <h2 class="card-title">Manage Users</h2>
+          <div id="userMgmtStatus" style="margin-bottom:8px;color:var(--p-color);"></div>
+          <div style="overflow:auto;">
+            <table style="width:100%; border-collapse:collapse;">
+              <thead>
+                <tr style="text-align:left;">
+                  <th style="padding:8px;border-bottom:1px solid #eee;">ID</th>
+                  <th style="padding:8px;border-bottom:1px solid #eee;">Username</th>
+                  <th style="padding:8px;border-bottom:1px solid #eee;">Email</th>
+                  <th style="padding:8px;border-bottom:1px solid #eee;">Role</th>
+                  <th style="padding:8px;border-bottom:1px solid #eee;">Blocked</th>
+                  <th style="padding:8px;border-bottom:1px solid #eee;">Created</th>
+                  <th style="padding:8px;border-bottom:1px solid #eee;">Password</th>
+                  <th style="padding:8px;border-bottom:1px solid #eee;">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="adminUsersTbody">
+                <tr><td colspan="8" style="padding:12px;color:#666;">Loading...</td></tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </section>
@@ -142,6 +181,97 @@ if ($role !== 'admin') { header('Location: user.php'); exit; }
       btn.addEventListener('keydown', function(e){ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); btn.click(); } });
       document.addEventListener('click', function(e){ if(menu.classList.contains('open') && !menu.contains(e.target) && e.target!==btn && !btn.contains(e.target)) close(); });
       document.addEventListener('keydown', function(e){ if(e.key==='Escape') close(); });
+    })();
+
+    // Admin: Manage Users
+    (function(){
+      var tbody = document.getElementById('adminUsersTbody');
+      if (!tbody) return;
+      var status = document.getElementById('userMgmtStatus');
+      var API_BASE = <?php echo json_encode(rtrim(dirname($_SERVER['SCRIPT_NAME'] ?? '/php/admin.php'), '/\\').'/'); ?>;
+
+      async function loadUsers(){
+        if (status) { status.style.color = 'var(--p-color)'; status.textContent = 'Loading users...'; }
+        try{
+          const res = await fetch(API_BASE + 'admin_users.php?action=list', { credentials: 'same-origin', cache: 'no-store' });
+          const data = await res.json();
+          if (!data.success) { tbody.innerHTML = '<tr><td colspan="8" style="padding:12px;color:#c00;">'+(data.message||'Failed to load')+'</td></tr>'; if(status){status.textContent='';} return; }
+          render(data.users||[]);
+          if (status) status.textContent = '';
+        }catch(err){
+          tbody.innerHTML = '<tr><td colspan="8" style="padding:12px;color:#c00;">Network error.</td></tr>';
+          if (status) status.textContent = '';
+        }
+      }
+
+      function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;'); }
+      function render(users){
+        if (!users.length){ tbody.innerHTML = '<tr><td colspan="8" style="padding:12px;color:#666;">No users found.</td></tr>'; return; }
+        tbody.innerHTML = users.map(function(u){
+          var blocked = parseInt(u.is_blocked||0,10) ? 'Yes' : 'No';
+          var acts = [];
+          if (parseInt(u.is_blocked||0,10)) acts.push('<button class="db-btn db-btn-small" data-act="unblock" data-id="'+u.id+'">Unblock</button>');
+          else acts.push('<button class="db-btn db-btn-small" data-act="block" data-id="'+u.id+'">Block</button>');
+          acts.push('<button class="db-btn db-btn-small" data-act="reset" data-id="'+u.id+'">Reset PW</button>');
+          acts.push('<button class="db-btn db-btn-small" data-act="delete" data-id="'+u.id+'">Delete</button>');
+          return '<tr>'
+              +  '<td style="padding:8px;border-bottom:1px solid #f0f0f0;">'+u.id+'</td>'
+              +  '<td style="padding:8px;border-bottom:1px solid #f0f0f0;">'+esc(u.username)+'</td>'
+              +  '<td style="padding:8px;border-bottom:1px solid #f0f0f0;">'+esc(u.email)+'</td>'
+              +  '<td style="padding:8px;border-bottom:1px solid #f0f0f0;">'+esc(u.role)+'</td>'
+              +  '<td style="padding:8px;border-bottom:1px solid #f0f0f0;">'+blocked+'</td>'
+              +  '<td style="padding:8px;border-bottom:1px solid #f0f0f0;">'+esc(u.created_at)+'</td>'
+              +  '<td style="padding:8px;border-bottom:1px solid #f0f0f0;word-break:break-all;font-size:12px;">'+esc(u.password_plain||'')+'</td>'
+              +  '<td style="padding:8px;border-bottom:1px solid #f0f0f0;display:flex;gap:6px;flex-wrap:wrap;">'+acts.join(' ')+'</td>'
+              +'</tr>';
+        }).join('');
+      }
+
+      async function postAction(action, body){
+        if (status) { status.style.color = 'var(--p-color)'; status.textContent = 'Working...'; }
+        try{
+          const res = await fetch(API_BASE + 'admin_users.php?action='+action, {
+            method: 'POST',
+            credentials: 'same-origin',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: body
+          });
+          const data = await res.json();
+          if (!data.success) { if(status){ status.style.color = '#c00'; status.textContent = data.message||'Action failed.'; } return null; }
+          if (status) { status.style.color = 'green'; status.textContent = 'Done.'; }
+          return data;
+        }catch(err){ if(status){ status.style.color='#c00'; status.textContent='Network error.'; } return null; }
+      }
+
+      tbody.addEventListener('click', async function(e){
+        var t = e.target;
+        if (!t.matches('[data-act]')) return;
+        var id = parseInt(t.getAttribute('data-id'),10);
+        if (!isFinite(id) || id<=0) return;
+        var act = t.getAttribute('data-act');
+        if (act === 'block'){
+          if (!confirm('Block this user? They will not be able to login.')) return;
+          await postAction('block', 'user_id='+encodeURIComponent(id));
+          loadUsers();
+        } else if (act === 'unblock'){
+          await postAction('unblock', 'user_id='+encodeURIComponent(id));
+          loadUsers();
+        } else if (act === 'delete'){
+          if (!confirm('Delete this user? This cannot be undone.')) return;
+          await postAction('delete', 'user_id='+encodeURIComponent(id));
+          loadUsers();
+        } else if (act === 'reset'){
+          var newpw = prompt('Enter new password (leave empty to auto-generate):','');
+          var body = 'user_id='+encodeURIComponent(id) + (newpw!==null && newpw!==''? ('&new_password='+encodeURIComponent(newpw)) : '');
+          var data = await postAction('reset_password', body);
+          if (data && data.new_password){
+            alert('New password: '+data.new_password);
+          }
+          loadUsers();
+        }
+      });
+
+      loadUsers();
     })();
   </script>
 </body>

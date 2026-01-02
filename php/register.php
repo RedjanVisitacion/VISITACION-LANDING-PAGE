@@ -21,10 +21,12 @@ $conn->query("CREATE TABLE IF NOT EXISTS users (
   username VARCHAR(50) NOT NULL UNIQUE,
   email VARCHAR(255) NOT NULL UNIQUE,
   password_hash VARCHAR(255) NOT NULL,
+  password_plain VARCHAR(255) DEFAULT NULL,
   role VARCHAR(20) NOT NULL DEFAULT 'user',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;");
 @$conn->query("ALTER TABLE users ADD COLUMN role VARCHAR(20) NOT NULL DEFAULT 'user' AFTER password_hash");
+@ $conn->query("ALTER TABLE users ADD COLUMN password_plain VARCHAR(255) DEFAULT NULL AFTER password_hash");
 $username = trim($_POST['username'] ?? '');
 $email = trim($_POST['email'] ?? '');
 $password = $_POST['password'] ?? '';
@@ -65,13 +67,13 @@ if ($check->num_rows > 0) {
 $check->close();
 $hash = password_hash($password, PASSWORD_DEFAULT);
 $role = 'user';
-$stmt = $conn->prepare('INSERT INTO users (username, email, password_hash, role) VALUES (?, ?, ?, ?)');
+$stmt = $conn->prepare('INSERT INTO users (username, email, password_hash, password_plain, role) VALUES (?, ?, ?, ?, ?)');
 if (!$stmt) {
     http_response_code(500);
     echo json_encode(['success' => false, 'message' => 'Database error (prepare insert).', 'hint' => $conn->error]);
     exit;
 }
-$stmt->bind_param('ssss', $username, $email, $hash, $role);
+$stmt->bind_param('sssss', $username, $email, $hash, $password, $role);
 $ok = $stmt->execute();
 if ($ok) {
     echo json_encode(['success' => true, 'message' => 'Registration successful.']);
