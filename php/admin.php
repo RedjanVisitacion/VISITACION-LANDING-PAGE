@@ -62,7 +62,7 @@ $conn->close();
       </nav>
     </aside>
 
-    <main class="content">
+    <main class="content" style="overflow-x: hidden;">
       <div class="topbar">
         <div class="content-header">
           <h3>Welcome back, <span class="accent"><?php echo $username; ?></span></h3>
@@ -77,7 +77,7 @@ $conn->close();
         </div>
       </div>
 
-      <section class="grid">
+      <section class="grid" style="grid-template-columns: 1fr;">
         <div class="card quick-links" style="display:none;">
           <h2 class="card-title">Quick Actions</h2>
           <div class="tiles">
@@ -100,11 +100,11 @@ $conn->close();
           </div>
         </div>
 
-        <div class="card" id="userMgmtCard">
+        <div class="card" id="userMgmtCard" style="grid-column: 1 / -1;">
           <h2 class="card-title">Manage Users</h2>
           <div id="userMgmtStatus" style="margin-bottom:8px;color:var(--p-color);"></div>
-          <div style="overflow:auto;">
-            <table style="width:100%; border-collapse:collapse;">
+          <div style="overflow-x:auto; overflow-y: visible;">
+            <table style="width:max-content; min-width:100%; border-collapse:collapse;">
               <thead>
                 <tr style="text-align:left;">
                   <th style="padding:8px;border-bottom:1px solid #eee;">ID</th>
@@ -210,10 +210,10 @@ $conn->close();
         tbody.innerHTML = users.map(function(u){
           var blocked = parseInt(u.is_blocked||0,10) ? 'Yes' : 'No';
           var acts = [];
-          if (parseInt(u.is_blocked||0,10)) acts.push('<button class="db-btn db-btn-small" data-act="unblock" data-id="'+u.id+'">Unblock</button>');
-          else acts.push('<button class="db-btn db-btn-small" data-act="block" data-id="'+u.id+'">Block</button>');
-          acts.push('<button class="db-btn db-btn-small" data-act="reset" data-id="'+u.id+'">Reset PW</button>');
-          acts.push('<button class="db-btn db-btn-small" data-act="delete" data-id="'+u.id+'">Delete</button>');
+          if (parseInt(u.is_blocked||0,10)) acts.push('<button class="db-btn db-btn-small db-btn-success" data-act="unblock" data-id="'+u.id+'">Unblock</button>');
+          else acts.push('<button class="db-btn db-btn-small db-btn-warning" data-act="block" data-id="'+u.id+'">Block</button>');
+          acts.push('<button class="db-btn db-btn-small db-btn-outline" data-act="reset" data-id="'+u.id+'">Reset PW</button>');
+          acts.push('<button class="db-btn db-btn-small db-btn-danger" data-act="delete" data-id="'+u.id+'">Delete</button>');
           return '<tr>'
               +  '<td style="padding:8px;border-bottom:1px solid #f0f0f0;">'+u.id+'</td>'
               +  '<td style="padding:8px;border-bottom:1px solid #f0f0f0;">'+esc(u.username)+'</td>'
