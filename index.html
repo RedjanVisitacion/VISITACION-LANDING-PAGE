@@ -23,15 +23,15 @@
 
 
     <!-- link file css -->
-    <link rel="stylesheet" href="css/styles.css?v=20260102c">
+    <link rel="stylesheet" href="css/styles.css?v=20261120">
 </head>
 <body>
     <div class="header">
         <div class="contanier">
-            <i id="btnMenu" class="fa-solid fa-bars"></i>
+            <button id="btnMenu" class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="primary-navigation"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
             <nav>
-                <img src="img/logo.png" alt="">
-                <div class="nav-links">
+                <a class="brand" href="#home" aria-label="Redjan Phil, home"><img src="img/logo.png" alt="Redjan Phil"></a>
+                <div class="nav-links" id="primary-navigation">
                     <a href="#home" class="active">Home</a>
                     <a href="#about">About</a>
                     <a href="#Service">Services</a>
@@ -55,9 +55,9 @@
         <div class="hero-slides"></div>
         <div class="contanier">
             <div class="text">
-                <p>Hello <span class="sep"></span> I am</p>
-                <h1>Redjan Phil S. Visitacion</h1>
-                <p class="typed-roles"><span id="typed"></span><span class="cursor">|</span></p>
+                <p class="eyebrow">CREATIVE PORTFOLIO <span class="sep"></span> HELLO, I?M</p>
+                <h1>Redjan Phil<br><em>S. Visitacion.</em></h1>
+                <p class="typed-roles"><span id="typed"></span><span class="cursor">|</span></p><p class="hero-intro">Turning ideas into meaningful digital experiences, one project at a time.</p>
                 
                 <!--
                 <ul>
@@ -101,8 +101,8 @@
 
             <div class="content">
                 <div class="text">
-                    <h3>About Me</h3>
-                    <span>I am BSIT student Creative Designer Photographer and Developer</span>
+                    <p class="section-kicker">A LITTLE ABOUT ME</p><h3>Curious by nature.<br>Creative by choice.</h3>
+                    <span>BSIT student, creative designer, photographer, and developer.</span>
                     <p>Self-motivation is the force that keeps pushing us to go on – it's our internal drive to achieve, produce, develop, and keep moving forward. When you think you're ready to quit something, or you just don't know how to start, your self-motivation is what pushes you to go on. Most good programmers do programming not because they expect to get paid or get adulation by the public, but because it is fun to program.</p>
                            <img src="img/sign.png" alt="">
 
@@ -123,24 +123,18 @@
 
         <!-- Promo Number Section -->
         <div class="promo-number">
-            <div class="small-box bord-rig bord-botm">
-                <span>0</span>
-                <p>All Ex</p>
-            </div>
+            <div class="small-box bord-rig bord-botm"><span>3</span><p>Creative disciplines</p></div>
 
             <div class="small-box bord-botm">
                 <span>3</span>
                 <p>Years Experience</p>
             </div>
 
-            <div class="small-box bord-rig">
-                <span>0</span>
-                <p>Girl Friend</p>
-            </div>
+            <div class="small-box bord-rig"><span>1</span><p>Creative journey</p></div>
 
             <div class="small-box">
                 <span>1</span>
-                <p>NCII holder</p>
+                <p>NC II holder</p>
             </div>
         </div>
 
@@ -327,9 +321,9 @@
         <div class="contact-form">
             <h3>Send a Message</h3>
             <form method="POST" action="#" onsubmit="return false;">
-                <input type="text" name="name" placeholder="Your Name" required>
-                <input type="email" name="email"  placeholder="Your Email" required>
-                <textarea name="message" placeholder="Your Message" rows="4" required></textarea>
+                <input type="text" name="name" placeholder="Your Name" aria-label="Your name" required>
+                <input type="email" name="email" placeholder="Your Email" aria-label="Your email" required>
+                <textarea name="message" placeholder="Your Message" aria-label="Your message" rows="4" required></textarea>
                 <button type="button" id="sendMessageBtn">Send</button>
             </form>
         </div>

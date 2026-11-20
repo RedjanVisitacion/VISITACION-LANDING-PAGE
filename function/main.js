@@ -6,54 +6,23 @@ window.onscroll = function () {
     } else {
         header.classList.remove('active');
     }
-    if (btnMenu) btnMenu.classList.remove('fa-times');
-    if (NavLinks) NavLinks.classList.remove('active');
+
 };
 
 let btnMenu = document.getElementById('btnMenu');
 let NavLinks = document.querySelector('.nav-links');
 
-// Menu toggle with delay
+// Accessible mobile navigation
 btnMenu.onclick = function () {
-    btnMenu.classList.toggle('fa-times');
-
-    if (!NavLinks.classList.contains("active")) {
-        setTimeout(() => {
-            NavLinks.classList.add("active");
-        }, 200); // 200ms delay before showing
-    } else {
-        setTimeout(() => {
-            NavLinks.classList.remove("active");
-        }, 200); // 200ms delay before hiding
-    }
+    const open = NavLinks.classList.toggle('active');
+    btnMenu.setAttribute('aria-expanded', String(open));
+    btnMenu.setAttribute('aria-label', open ? 'Close navigation' : 'Open navigation');
 };
-
-// Smooth Scroll with Delay (Fixed Login Button Issue)
 document.querySelectorAll('.nav-links a').forEach(link => {
-    link.addEventListener("click", function (e) {
-        // Let the Login button (with its inline onclick) handle navigation/overlay
-        if (this.classList.contains("btn")) {
-            return;
-        }
-
-        e.preventDefault(); // Prevent default for internal links
-        let targetId = this.getAttribute("href");
-        let targetSection = document.querySelector(targetId);
-
-        if (targetSection) {
-            setTimeout(() => {
-                window.scrollTo({
-                    top: targetSection.offsetTop - 50,
-                    behavior: "smooth"
-                });
-            }, 300);
-        }
-
-        // Close menu after clicking
-        setTimeout(() => {
-            if (NavLinks) NavLinks.classList.remove("active");
-            if (btnMenu) btnMenu.classList.remove("fa-times");
-        }, 500);
+    link.addEventListener('click', function () {
+        NavLinks.classList.remove('active');
+        btnMenu.setAttribute('aria-expanded', 'false');
+        btnMenu.setAttribute('aria-label', 'Open navigation');
     });
 });
 
@@ -79,14 +48,14 @@ let links = document.querySelectorAll('.nav-links a');
 let sections = document.querySelectorAll('section');
 
 function activeMenu() {
-    let len = sections.length;
-    while (--len && window.scrollY + 100 < sections[len].offsetTop) {}
-    links.forEach(ltx => ltx.classList.remove("active"));
-    if (links[len]) {
-        links[len].classList.add("active");
-    } else if (links[0]) {
-        links[0].classList.add("active");
-    }
+    let current = 'home';
+    document.querySelectorAll('.nav-links a[href^="#"]:not(.btn)').forEach(function (link) {
+        const section = document.querySelector(link.getAttribute('href'));
+        if (section && section.getBoundingClientRect().top <= 140) current = section.id;
+    });
+    links.forEach(function (link) {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+    });
 }
 
 // Load site config (home bg) and apply to hero
@@ -380,7 +349,7 @@ function initContactGate(){
       if (!items.length){ wrap.innerHTML = '<div style="text-align:center;color:#666;">No photos yet.</div>'; return; }
       wrap.innerHTML = items.map(function(it){ var url = esc(it.url||''); return '<div class="gallery-item" onclick="openLightbox(\''+url+'\', \'image\')"><img src="'+url+'" alt="Photo"></div>'; }).join('');
     }catch(e){
-      wrap.innerHTML = '<div style="text-align:center;color:#c00;">Failed to load gallery.</div>';
+      wrap.innerHTML = '<p class="gallery-empty">The photo gallery is available when the site is connected to its server.</p>';
     }
   }
   if (document.readyState === 'loading') { document.addEventListener('DOMContentLoaded', loadGallery); } else { loadGallery(); }
