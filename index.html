@@ -1,424 +1,57 @@
-<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="en">
 <head>
-    <style>
-    .dot{
-        color: white;
-    }
-    /* Hash-route overlay for Login */
-    #route-login-overlay { position: fixed; inset: 0; z-index: 9999; display: none; background: #000; }
-    #route-login-overlay iframe { width: 100%; height: 100%; border: 0; display: block; }
-</style>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RPSV_CODES</title>
-    <link rel="icon" href="img/icon.png">
-    <!-- link file icon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-
-    <!-- Link Swiper's CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css" />
-
-
-    <!-- link file css -->
-    <link rel="stylesheet" href="css/styles.css?v=20261120">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The portfolio of Redjan Phil S. Visitacion: programming, photography, and video editing.">
+  <title>Redjan Visitacion | Portfolio</title>
+  <link rel="icon" href="img/icon.png">
+  <link rel="stylesheet" href="css/portfolio.css?v=20261120b">
+  <script src="function/portfolio.js?v=20261120b" defer></script>
 </head>
 <body>
-    <div class="header">
-        <div class="contanier">
-            <button id="btnMenu" class="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="primary-navigation"><i class="fa-solid fa-bars" aria-hidden="true"></i></button>
-            <nav>
-                <a class="brand" href="#home" aria-label="Redjan Phil, home"><img src="img/logo.png" alt="Redjan Phil"></a>
-                <div class="nav-links" id="primary-navigation">
-                    <a href="#home" class="active">Home</a>
-                    <a href="#about">About</a>
-                    <a href="#Service">Services</a>
-                    <a href="#Blog">Blog</a>
-                    <a href="#Pages">Pages</a>
-                    <a href="#Contacts">Contacts</a>
-                    
-
-                    <a href="#login" class="btn" target="rpsv_login" onclick="window.open('#login','rpsv_login'); return false;">Login</a>
-                </div>    
-                
-            </nav>
-        </div>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a class="wordmark" href="#home" aria-label="Redjan Visitacion, home">Redjan<span>.</span></a>
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="navigation">Menu <span aria-hidden="true">+</span></button>
+      <nav id="navigation" aria-label="Main navigation">
+        <a href="#work">Work</a><a href="#about">About</a><a href="#media">Media</a><a href="#contact">Contact</a>
+        <a class="nav-login" href="html/Login.html">Login</a>
+      </nav>
     </div>
-
-    <!-- start Home  -->
-
-    
-
-    <section class="home" id="home">
-        <div class="hero-slides"></div>
-        <div class="contanier">
-            <div class="text">
-                <p class="eyebrow">CREATIVE PORTFOLIO <span class="sep"></span> HELLO, I?M</p>
-                <h1>Redjan Phil<br><em>S. Visitacion.</em></h1>
-                <p class="typed-roles"><span id="typed"></span><span class="cursor">|</span></p><p class="hero-intro">Turning ideas into meaningful digital experiences, one project at a time.</p>
-                
-                <!--
-                <ul>
-                    <li>A BSIT Student</li>
-                    <li>Editor</li>
-                    <li>Programmer</li>
-                    <li>Photographer</li>
-                </ul>
-                 -->
-                <a href="https://redjanvisitacion.github.io/Curriculum-Vitae/" target="_blank">
-                    <button class="cv-button">View CV</button>
-                </a>
-
-                <a href="html/Certificate.html">
-                    <button class="cv-button">Certificate</button>
-                </a>
-
-                <a href="https://redjanvisitacion.github.io/RPSV-GAMES/main.html">
-                    <button class="cv-button">Play</button>
-                </a>
-
-
-                <a href="https://redjanvisitacion.github.io/RPSV_AI/">
-                    <button id="cv-button" class="cv-button">AI</button>
-                </a>
-            
-
-            </div>
-        </div>
+  </header>
+  <main id="main">
+    <section class="hero wrap" id="home">
+      <div class="hero-copy">
+        <p class="eyebrow">PORTFOLIO / REDJAN VISITACION</p>
+        <h1>Hi, I’m Redjan.<br><span>I make things for the web.</span></h1>
+        <p class="hero-description">I’m a BSIT student interested in programming, photography, and video editing. This is a collection of the things I’m learning and making.</p>
+        <div class="hero-actions"><a class="button button-dark" href="#work">Explore my work</a><a class="text-link" href="https://redjanvisitacion.github.io/Curriculum-Vitae/" target="_blank" rel="noopener noreferrer">View my CV <span aria-hidden="true">↗</span></a></div>
+      </div>
+      <figure class="portrait"><img src="img/profile.jpg" alt="Portrait of Redjan Visitacion"><figcaption><span>REDJAN PHIL S. VISITACION</span><span>DEVELOPER &amp; CREATIVE</span></figcaption></figure>
+      <div class="hero-bottom"><span>PROGRAMMING / PHOTOGRAPHY / VIDEO</span><span>SCROLL TO EXPLORE ↓</span></div>
     </section>
 
-
-    <!-- start About -->
-
-    <section class="about" id="about">
-        <div class="sec-top">
-            <span>about</span>
-        </div>
-
-        <div class="contanier">
-
-            <div class="content">
-                <div class="text">
-                    <p class="section-kicker">A LITTLE ABOUT ME</p><h3>Curious by nature.<br>Creative by choice.</h3>
-                    <span>BSIT student, creative designer, photographer, and developer.</span>
-                    <p>Self-motivation is the force that keeps pushing us to go on – it's our internal drive to achieve, produce, develop, and keep moving forward. When you think you're ready to quit something, or you just don't know how to start, your self-motivation is what pushes you to go on. Most good programmers do programming not because they expect to get paid or get adulation by the public, but because it is fun to program.</p>
-                           <img src="img/sign.png" alt="">
-
-                </div>
-                <div class="div-img">
-                    <img src="img/about.png" alt="">
-                </div>
-            </div>
-            
- <!-- start Service -->
-
-<section class="Service" id="Service">
-    <div class="sec-top">
-        <span>Services</span>
-    </div>
-
-    <div class="cont2">
-
-        <!-- Promo Number Section -->
-        <div class="promo-number">
-            <div class="small-box bord-rig bord-botm"><span>3</span><p>Creative disciplines</p></div>
-
-            <div class="small-box bord-botm">
-                <span>3</span>
-                <p>Years Experience</p>
-            </div>
-
-            <div class="small-box bord-rig"><span>1</span><p>Creative journey</p></div>
-
-            <div class="small-box">
-                <span>1</span>
-                <p>NC II holder</p>
-            </div>
-        </div>
-
-        <!-- Skills Section -->
-        
-        <div class="skill-with-social">
-            <div class="skill-list">
-                <h3 class="heading">My Skills</h3>
-
-                <div class="single-skill">
-                    <div class="skill-title">
-                        <h3>Being Active on Social Media</h3>
-                        <span>95%</span>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-bar" style="width: 95%;"></div>
-                    </div>
-                </div>
-
-                <div class="single-skill">
-                    <div class="skill-title">
-                        <h3>Video Editor</h3>
-                        <span>40%</span>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-bar" style="width: 40%;"></div>
-                    </div>
-                </div>
-
-                <div class="single-skill">
-                    <div class="skill-title">
-                        <h3>Programmer</h3>
-                        <span>50%</span>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-bar" style="width: 50%;"></div>
-                    </div>
-                </div>
-
-                <div class="single-skill">
-                    <div class="skill-title">
-                        <h3>Photographer</h3>
-                        <span>70%</span>
-                    </div>
-                    <div class="progress">
-                        <div class="progress-bar" style="width: 70%;"></div>
-                    </div>
-                </div>
-
-
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- End Service Section -->
-
-                
-<!-- Blog Section -->
-<section class="Service" id="Blog">
-    <div class="sec-top">
-        <span>Blog</span>
-    </div>
-    <p class="section-description">
-        Welcome to my blog—a space where I share my journey in photography, programming, and video editing.  
-        From capturing emotions through the lens to tackling coding challenges and crafting stunning visuals,  
-        this blog is a mix of creativity, insights, and inspiration. Join me as I explore new ideas, share tips,  
-        and navigate the exciting path of learning and growth. Let’s create, innovate, and inspire together!
-    </p>
-    
-</section>
-
-
-
-<section class="blog">
-    <div class="container">
-        <!-- Photos Section -->
-<h2 class="section-title">📸 Photo Gallery</h2>
-<div class="gallery-container" id="photoGallery"></div>
-
-<!-- Videos Section -->
-<h2 class="section-title">🎥 Video Gallery</h2>
-<div class="gallery-container">
-    <div class="gallery-item" onclick="openLightbox('video/memories.mp4', 'video')">
-        <video src="video/memories.mp4" muted></video>
-    </div>
-    <div class="gallery-item" onclick="openLightbox('video/Reels.mp4', 'video')">
-        <video src="video/Reels.mp4" muted></video>
-    </div>
-    <div class="gallery-item" onclick="openLightbox('video/SRMS.mp4', 'video')">
-        <video src="video/SRMS.mp4" muted></video>
-    </div>
-</div>
-
-<!-- Audio Section -->
-<h2 class="section-title">🎵 Audio Gallery</h2>
-<div class="audio-container">
-    <div class="audio-item">
-        <p>🎶 God's not Dead</p>
-        <audio controls>
-            <source src="audio/GodsNotDead.mp3" type="audio/mpeg">
-        </audio>
-    </div>
-    <div class="audio-item">
-        <p>🎶 Praise</p>
-        <audio controls>
-            <source src="audio/Praise.mp3" type="audio/mpeg">
-        </audio>
-    </div>
-</div>
-
-<!-- Lightbox -->
-<div id="lightbox" class="lightbox">
-    <span class="close" onclick="closeLightbox()">&times;</span>
-    <img id="lightbox-img" class="lightbox-img">
-    <video id="lightbox-video" class="lightbox-video" controls></video>
-</div>
-    </div>
-</section>
-
-
-<!-- Pages Section -->
-<section class="pages" id="Pages">
-    <div class="sec-top">  
-        <span>Pages</span>
-    </div>
-    <div class="container">
-        <div class="content">
-            <h2>Skills & Projects</h2>
-            <p class="words">Dive into my world of programming, photography, and video editing. Check out my latest works, tutorials, and projects.</p>
-            
-            <div class="page-links">
-                <a href="#" class="page-card" onclick="alert('This part is not completely done');">
-                    <i class="fa-solid fa-code"></i>
-                    <h3>Programming</h3>
-                    <p>See my latest coding projects and software development work.</p>
-                </a>
-            
-                <a href="#" class="page-card" onclick="alert('This part is not completely done');">
-                    <i class="fa-solid fa-camera"></i>
-                    <h3>Photography</h3>
-                    <p>Explore my best photography shots and editing techniques.</p>
-                </a>
-            
-                <a href="#" class="page-card" onclick="alert('This part is not completely done');">
-                    <i class="fa-solid fa-film"></i>
-                    <h3>Video Editing</h3>
-                    <p>Watch my editing projects and learn cool video effects.</p>
-                </a>
-            
-                <a href="#" class="page-card" onclick="alert('This part is not completely done');">
-                    <i class="fa-solid fa-chalkboard-teacher"></i>
-                    <h3>Tutorials</h3>
-                    <p>Learn programming, photography, and editing from my guides.</p>
-                </a>
-            </div>
-            
-        </div>
-    </div>
-</section>
-
-
-   
-       <!-- Contacts Section -->
-<section class="Contacts" id="Contacts">
-
-    
-
-    <div class="sec-top">  
-        <span>Contacts</span>
-
-    </div>
-
-
-    <div class="container">
-        <div class="contact-content">
-            <p>If you have any inquiries about programming, photography, or video editing, feel free to reach out to me. I'm always open to collaborations and new projects!</p>
-        </div>
-
-
-        
-
-        <!-- Contact Form -->
-        <div class="contact-form">
-            <h3>Send a Message</h3>
-            <form method="POST" action="#" onsubmit="return false;">
-                <input type="text" name="name" placeholder="Your Name" aria-label="Your name" required>
-                <input type="email" name="email" placeholder="Your Email" aria-label="Your email" required>
-                <textarea name="message" placeholder="Your Message" aria-label="Your message" rows="4" required></textarea>
-                <button type="button" id="sendMessageBtn">Send</button>
-            </form>
-        </div>
-    </div> 
-    
-
-    
-    
-
-        <!-- Social Media Links -->
-        <div class="social-status">
-            <h3>Follow Me On:</h3>
-
-
-            <blockquote class="tiktok-embed" cite="https://www.tiktok.com/@rpsv_codes" data-unique-id="rpsv_codes" data-embed-type="creator" style="max-width: 780px; min-width: 288px;" > <section> <a target="_blank" href="https://www.tiktok.com/@rpsv_codes?refer=creator_embed">@rpsv_codes</a> </section> </blockquote> <script async src="https://www.tiktok.com/embed.js"></script>
-
-
-
-
-            <a href="https://github.com/RedjanVisitacion" target="_blank">
-                <img src="https://img.shields.io/badge/GitHub-RedjanVisitacion-blue?style=for-the-badge&logo=github" alt="GitHub Profile">
-            </a>
-            
-
-
-
-
-            <p>&#8203;</p>
-
-
-            <div class="social-profile-list">
-                <a href="https://www.instagram.com/redjanphilsvisitacion?igsh=MXF2c2t5ZGttanJjeA==" target="_blank">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <a href="https://web.facebook.com/zedjan.zedjan.3" target="_blank">
-                    <i class="fab fa-facebook-f"></i>
-                </a>
-                <a href="https://www.tiktok.com/@rpsv_codes?_t=8k15sq4ZSew&_r=1" target="_blank">
-                    <i class="fab fa-tiktok"></i>
-                </a>
-                <a href="https://www.youtube.com/@redjanvisitacion5570" target="_blank">
-                    <i class="fab fa-youtube"></i>
-                </a>
-               
-            </div>
-        </div>
-
-        
-    </div>
-
-
-    
-
-</section>
-
-
-     <!-- Footer -->
-
-   <footer>
-    <p>&copy; 2025 Redjan Phil S. Visitacion | Owner of this landing page</p>
-   </footer>
-    
-
-
-
-
-    <!-- Hash-route: login overlay -->
-    <div id="route-login-overlay">
-        <iframe id="route-login-frame" src="about:blank" title="Login"></iframe>
-    </div>
-    <!-- Swiper JS -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.js"></script>
-
-    <!-- link file JS -->
-    <script src="function/main.js?v=20260102e"></script>
-    <script>
-      (function(){
-        function updateRoute(){
-          var hash = location.hash;
-          var overlay = document.getElementById('route-login-overlay');
-          var frame = document.getElementById('route-login-frame');
-          if(!overlay || !frame) return;
-          var isLogin = (hash === '#login' || hash === '#/login');
-          if(isLogin){
-            overlay.style.display = 'block';
-            // Always reload login content to reflect latest settings (e.g., dynamic background)
-            frame.src = 'html/Login.html?t=' + Date.now();
-            frame.dataset.loaded = '1';
-          } else {
-            overlay.style.display = 'none';
-          }
-        }
-        window.addEventListener('hashchange', updateRoute);
-        window.addEventListener('load', updateRoute);
-      })();
-    </script>
+    <section class="work section" id="work"><div class="wrap">
+      <div class="section-heading"><div><p class="eyebrow">SELECTED WORK</p><h2>A few things I’ve made.</h2></div><p>Projects and experiments from my corner of the internet.</p></div>
+      <div class="project-list">
+        <article class="project"><div class="project-visual visual-ai"><span>RPSV<span class="accent">_</span>AI</span><small>AN INTERACTIVE WEB PROJECT</small></div><div class="project-copy"><p class="project-type">WEB PROJECT</p><h3>RPSV AI</h3><p>An AI-themed project to explore and interact with on the web.</p><a class="text-link" href="https://redjanvisitacion.github.io/RPSV_AI/" target="_blank" rel="noopener noreferrer">Visit project <span aria-hidden="true">↗</span></a></div></article>
+        <article class="project"><div class="project-visual visual-game"><div class="game-window"><span>RPSV GAMES</span><strong>PLAY<br>AND<br>EXPLORE<span>.</span></strong><small>PERSONAL PROJECT</small></div></div><div class="project-copy"><p class="project-type">GAMES / WEB</p><h3>RPSV Games</h3><p>A collection of games to explore and play in your browser.</p><a class="text-link" href="https://redjanvisitacion.github.io/RPSV-GAMES/main.html" target="_blank" rel="noopener noreferrer">Play the games <span aria-hidden="true">↗</span></a></div></article>
+        <article class="project project-compact"><div><p class="project-type">BACKGROUND &amp; LEARNING</p><h3>More about my experience</h3><p>Take a closer look at my background and certificates.</p></div><div class="project-links"><a class="text-link" href="https://redjanvisitacion.github.io/Curriculum-Vitae/" target="_blank" rel="noopener noreferrer">View CV <span aria-hidden="true">↗</span></a><a class="text-link" href="html/Certificate.html">View certificates <span aria-hidden="true">↗</span></a><a class="text-link" href="https://github.com/RedjanVisitacion" target="_blank" rel="noopener noreferrer">GitHub profile <span aria-hidden="true">↗</span></a></div></article>
+      </div>
+    </div></section>
+
+    <section class="about section" id="about"><div class="wrap about-grid"><div><p class="eyebrow">ABOUT ME</p><h2>Learning by<br>doing.</h2></div><div class="about-copy"><p class="about-lead">I’m Redjan, a BSIT student who enjoys working with technology and making visual content.</p><p>Programming gives me a way to turn an idea into something people can use. Away from code, I enjoy photography and video editing—finding moments worth capturing and putting stories together.</p><div class="disciplines"><span>Programming</span><span>Photography</span><span>Video editing</span></div></div></div></section>
+
+    <section class="media section" id="media"><div class="wrap"><div class="section-heading"><div><p class="eyebrow">BEYOND THE CODE</p><h2>Moments in motion.</h2></div><p>A selection of videos from my collection.</p></div><div class="video-grid">
+      <figure><video controls preload="metadata" playsinline src="video/memories.mp4"></video><figcaption><strong>Memories</strong><span>VIDEO</span></figcaption></figure>
+      <figure><video controls preload="metadata" playsinline src="video/Reels.mp4"></video><figcaption><strong>Reels</strong><span>VIDEO</span></figcaption></figure>
+      <figure><video controls preload="metadata" playsinline src="video/SRMS.mp4"></video><figcaption><strong>SRMS</strong><span>VIDEO</span></figcaption></figure>
+    </div><details class="audio-details"><summary>Listen to my audio collection</summary><div class="audio-list"><label>God’s Not Dead<audio controls preload="none" src="audio/GodsNotDead.mp3"></audio></label><label>Praise<audio controls preload="none" src="audio/Praise.mp3"></audio></label></div></details></div></section>
+
+    <section class="contact section" id="contact"><div class="wrap contact-grid"><div><p class="eyebrow">GET IN TOUCH</p><h2>Let’s connect.</h2><p>Have a question or an idea to share? Find me on Facebook or explore more of my work on GitHub.</p><a class="button button-light" href="https://web.facebook.com/zedjan.zedjan.3" target="_blank" rel="noopener noreferrer">Message me on Facebook</a></div><div class="contact-links"><p>FIND ME ONLINE</p><a href="https://github.com/RedjanVisitacion" target="_blank" rel="noopener noreferrer">GitHub <span>↗</span></a><a href="https://www.instagram.com/redjanphilsvisitacion" target="_blank" rel="noopener noreferrer">Instagram <span>↗</span></a><a href="https://www.tiktok.com/@rpsv_codes" target="_blank" rel="noopener noreferrer">TikTok <span>↗</span></a><a href="https://www.youtube.com/@redjanvisitacion5570" target="_blank" rel="noopener noreferrer">YouTube <span>↗</span></a></div></div></section>
+  </main>
+  <footer><div class="wrap footer-inner"><span>© <span id="year">2026</span> Redjan Phil S. Visitacion</span><a href="#home">Back to top ↑</a></div></footer>
 </body>
 </html>
