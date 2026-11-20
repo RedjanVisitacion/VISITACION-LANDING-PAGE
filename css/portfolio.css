@@ -6,3 +6,5 @@
 .hero-description{max-width:500px}
 @media (min-width:801px){.hero{min-height:620px;padding-top:45px}.hero-copy{padding-bottom:50px}.portrait img{aspect-ratio:1/1;max-height:470px}.hero h1{font-size:clamp(44px,4.6vw,64px)}}
 @media (max-width:600px){.hero h1{font-size:clamp(36px,10vw,43px)}.portrait{width:min(85%,340px)}}
+
+.visual-elecom{background:#273d37;color:#f8f8f5;padding:38px}.elecom-mark{width:100%;max-width:410px;min-height:225px;border:1px solid #8ca49a;padding:28px;display:flex;flex-direction:column;justify-content:space-between}.elecom-mark-label,.elecom-mark-subtitle{font-size:10px;font-weight:700;letter-spacing:.15em;color:#c6d7ce}.elecom-mark strong{font:800 clamp(46px,6vw,75px)/1 Manrope,Arial,sans-serif;letter-spacing:-.07em}.elecom-mark strong span{color:#e39a9d}.project-tags{display:flex;flex-wrap:wrap;gap:8px}.project-tags span{font-size:12px;color:#52605a;border:1px solid #d1d9d4;padding:5px 9px}
